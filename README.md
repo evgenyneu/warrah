@@ -19,29 +19,54 @@ The program supports single and multi-line comments in the following languages:
 - Bash
 - C
 - C#
+- CSS
 - C++
 - Dockerfile
+- EJS
 - Elixir
 - Erlang
+- F#
+- Fortran
 - Go
+- Gherkin (Cucumber BDD)
+- Gradle
+- Handlebars / Mustache
 - Haskell
+- HCL (HashiCorp Configuration Language)
+- HTML
 - INI
 - Java
 - JavaScript
+- Jinja2
+- JSONC (JSON with Comments)
 - Julia
 - Kotlin
+- Lisp / Clojure / Scheme
 - Makefile
+- Org-mode
 - Perl
 - PHP
+- PowerShell
+- Prolog
 - Python
+- QML (Qt Modeling Language)
 - R
+- Rego (Open Policy Agent)
 - Ruby
 - Rust
+- SASS / SCSS
 - Scala
 - Shell
+- Starlark (Bazel build language)
 - Swift
+- SQL
+- Terraform
+- Less
+- Liquid
 - TOML
 - TypeScript
+- Twig
+- Vue
 - YAML
 
 See [docs/languages.md](docs/languages.md) for more details about the types of comments supported in each language.

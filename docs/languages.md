@@ -1,6 +1,6 @@
 # Supported languages
 
-Here is the list of supported languages, in which Warrah will remove comments. Please note comments inside strings will also be removed and result in invalid code.
+Here is the list of supported languages, in which Warrah will remove comments. The languages is detected based on the specifies file extensions or file names.  Please note comments inside strings will also be removed and result in invalid code.
 
 - **Assembly**
   - Extensions: `.asm`, `.s`
@@ -14,6 +14,10 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extension: `.cs`
   - Comments: `//`, `/* ... */`
 
+- **CSS**
+  - Extensions: `.css`
+  - Comments: `/* ... */`
+
 - **Config files / scripting (misc)**
   - Extensions: `.env`, `.conf`, `.gitignore`, `.cfg`
   - Comments: `#`
@@ -22,18 +26,55 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extension: `Dockerfile`
   - Comments: `#`
 
+- **EJS (Embedded JavaScript)**
+  - Extension: `.ejs`
+  - Comments: `<%-- ... --%>`
+
 - **Elixir / Erlang**
   - Extensions: `.ex`, `.exs`, `.erl`
+  - Comments: `#`
+
+- **F#**
+  - Extension: `.fs`, `.fsx`
+  - Comments: `//`
+  - ⚠️ Multiline comments `(* ... *)` are not supported
+
+- **Fortran**
+  - Extensions: `.f90`, `.f95`, `.f03`, `.f08`, `.f`, `.for`
+  - Comments: `!`
+
+- **Gherkin (Cucumber BDD)**
+  - Extension: `.feature`
   - Comments: `#`
 
 - **Go**
   - Extension: `.go`
   - Comments: `//`, `/* ... */`
 
+- **Gradle**
+  - Extensions: `.gradle`, `.gradle.kts`
+  - Comments: `//`, `/* ... */`
+
+- **Handlebars / Mustache**
+  - Extensions: `.hbs`, `.handlebars`, `.mustache`
+  - Comments: `{{! ... }}`
+
 - **Haskell**
   - Extension: `.hs`
   - Comments: `--`
   - ⚠️ Multiline comments `{- -}` are not supported
+
+- **HCL (HashiCorp Configuration Language)**
+  - Extension: `.hcl`
+  - Comments: `#`, `//`, `/* ... */`
+
+- **HTML**
+  - Extensions: `.html`, `.htm`
+  - Comments: `<!-- ... -->`
+
+- **JSONC (JSON with Comments)**
+  - Extensions: `.jsonc`, `tsconfig.json`
+  - Comments: `//`, `/* ... */`
 
 - **Java**
   - Extension: `.java`
@@ -42,6 +83,10 @@ Here is the list of supported languages, in which Warrah will remove comments. P
 - **JavaScript / TypeScript**
   - Extensions: `.js`, `.ts`
   - Comments: `//`, `/* ... */`
+
+- **Jinja2**
+  - Extensions: `.jinja`, `.j2`, `.html`
+  - Comments: `{# ... #}`
 
 - **Julia**
   - Extension: `.jl`
@@ -52,8 +97,25 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extension: `.kt`
   - Comments: `//`, `/* ... */`
 
+- **Less**
+  - Extension: `.less`
+  - Comments: `//`, `/* ... */`
+
+- **Lisp / Clojure / Scheme**
+  - Extensions: `.lisp`, `.clj`, `.scm`
+  - Comments: `;`
+  - ⚠️ Multiline comments `#| ... |#` are not supported
+
+- **Liquid**
+  - Extension: `.liquid`
+  - Comments: `{% comment %} ... {% endcomment %}`
+
 - **Makefile**
   - Extension: `Makefile`, `.mk`
+  - Comments: `#`
+
+- **Org-mode**
+  - Extension: `.org`
   - Comments: `#`
 
 - **Perl**
@@ -64,13 +126,29 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extension: `.php`
   - Comments: `//`, `#`, `/* ... */`
 
+- **PowerShell**
+  - Extension: `.ps1`
+  - Comments: `#`, `<# ... #>`
+
+- **Prolog**
+  - Extension: `.pl`
+  - Comments: `%`, `/* ... */`
+
 - **Python** (partial)
   - Extension: `.py`
   - Comments: `#`
   - ⚠️ Doesn’t handle `""" docstrings """`
 
+- **QML (Qt Modeling Language)**
+  - Extension: `.qml`
+  - Comments: `//`, `/* ... */`
+
 - **R**
   - Extension: `.r`, `.R`
+  - Comments: `#`
+
+- **Rego (Open Policy Agent)**
+  - Extension: `.rego`
   - Comments: `#`
 
 - **Ruby**
@@ -81,6 +159,10 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extension: `.rs`
   - Comments: `//`, `/* ... */`
 
+- **SASS / SCSS**
+  - Extensions: `.sass`, `.scss`
+  - Comments: `//`, `/* ... */`
+
 - **Scala**
   - Extension: `.scala`
   - Comments: `//`, `/* ... */`
@@ -89,9 +171,32 @@ Here is the list of supported languages, in which Warrah will remove comments. P
   - Extensions: `.sh`, `.bash`
   - Comments: `#`
 
+- **Starlark (Bazel build language)**
+  - Extension: `.bzl`
+  - Comments: `#`
+
 - **Swift**
   - Extension: `.swift`
   - Comments: `//`, `/* ... */`
+
+- **SQL**
+  - Extensions: `.sql`
+  - Comments: `--`, `/* ... */`
+
+- **Terraform (HCL)**
+  - Extension: `.tf`
+  - Comments: `#`, `//`, `/* ... */`
+
+- **Twig**
+  - Extension: `.twig`
+  - Comments: `{# ... #}`
+
+- **Vue**
+  - Extension: `.vue`
+  - Comments:
+    - HTML: `<!-- ... -->`
+    - JS: `//`, `/* ... */`
+    - CSS: `/* ... */`
 
 - **YAML / TOML / INI**
   - Extensions: `.yaml`, `.yml`, `.toml`, `.ini`
