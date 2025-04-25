@@ -1,11 +1,4 @@
-mod common;
 use assert_cmd::Command;
-use common::run_in_terminal;
-use expectrl::{spawn, Eof};
-use std::fs;
-use std::io::Read;
-use std::path::PathBuf;
-use std::time::Duration;
 use warrah::test_utils::fixture::{assert_eq_fixture, fixture_path};
 
 #[test]
