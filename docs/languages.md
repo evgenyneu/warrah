@@ -82,7 +82,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `//`, `/* ... */`
 
 - **Gradle**
-  - Extensions: `.gradle`, `.gradle.kts`
+  - Extensions: `.gradle`, `.kts`
   - Comments: `//`, `/* ... */`
 
 - **Groovy**
@@ -123,7 +123,8 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `{# ... #}`
 
 - **JSONC (JSON with Comments)**
-  - Extensions: `.jsonc`, `tsconfig.json`
+  - Extension: `.jsonc`
+  - File: `tsconfig.json`
   - Comments: `//`, `/* ... */`
 
 - **JSX / TSX (React)**
@@ -157,7 +158,8 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `{% comment %} ... {% endcomment %}`
 
 - **Makefile**
-  - Extension: `Makefile`, `.mk`
+  - Extension: `.mk`
+  - File: `Makefile`
   - Comments: `#`
 
 - **Markdown**
