@@ -14,6 +14,14 @@ Here is the list of supported languages, in which Warrah will remove comments. T
   - Extension: `.cs`
   - Comments: `//`, `/* ... */`
 
+- **CMake**
+  - File: `CMakeLists.txt`, `.cmake`
+  - Comments: `#`
+
+- **CoffeeScript**
+  - Extension: `.coffee`
+  - Comments: `#`, `### ... ###`
+
 - **CSS**
   - Extensions: `.css`
   - Comments: `/* ... */`
@@ -97,6 +105,10 @@ Here is the list of supported languages, in which Warrah will remove comments. T
   - Extension: `.kt`
   - Comments: `//`, `/* ... */`
 
+- **LaTeX**
+  - Extension: `.tex`
+  - Comments: `%`
+
 - **Less**
   - Extension: `.less`
   - Comments: `//`, `/* ... */`
@@ -113,6 +125,14 @@ Here is the list of supported languages, in which Warrah will remove comments. T
 - **Makefile**
   - Extension: `Makefile`, `.mk`
   - Comments: `#`
+
+- **Markdown**
+  - Extension: `.md`
+  - Comments: `<!-- ... -->`
+
+- **MATLAB / Octave**
+  - Extension: `.m`
+  - Comments: `%`
 
 - **Org-mode**
   - Extension: `.org`
@@ -191,12 +211,24 @@ Here is the list of supported languages, in which Warrah will remove comments. T
   - Extension: `.twig`
   - Comments: `{# ... #}`
 
+- **Verilog / SystemVerilog**
+  - Extensions: `.v`, `.sv`, `.svh`
+  - Comments: `//`, `/* ... */`
+
+- **VB / VBScript**
+  - Extensions: `.vb`, `.vbs`
+  - Comments: `'`
+
 - **Vue**
   - Extension: `.vue`
   - Comments:
     - HTML: `<!-- ... -->`
     - JS: `//`, `/* ... */`
     - CSS: `/* ... */`
+
+- **XML**
+  - Extensions: `.xml`, `.xsd`, `.pom`, etc.
+  - Comments: `<!-- ... -->`
 
 - **YAML / TOML / INI**
   - Extensions: `.yaml`, `.yml`, `.toml`, `.ini`

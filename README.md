@@ -19,16 +19,18 @@ The program supports single and multi-line comments in the following languages:
 - Bash
 - C
 - C#
-- CSS
 - C++
+- CMake
+- CoffeeScript
+- CSS
 - Dockerfile
 - EJS
 - Elixir
 - Erlang
 - F#
 - Fortran
-- Go
 - Gherkin (Cucumber BDD)
+- Go
 - Gradle
 - Handlebars / Mustache
 - Haskell
@@ -41,8 +43,13 @@ The program supports single and multi-line comments in the following languages:
 - JSONC (JSON with Comments)
 - Julia
 - Kotlin
+- LaTeX
+- Less
+- Liquid
 - Lisp / Clojure / Scheme
 - Makefile
+- Markdown
+- MATLAB / Octave
 - Org-mode
 - Perl
 - PHP
@@ -57,16 +64,17 @@ The program supports single and multi-line comments in the following languages:
 - SASS / SCSS
 - Scala
 - Shell
+- SQL
 - Starlark (Bazel build language)
 - Swift
-- SQL
 - Terraform
-- Less
-- Liquid
 - TOML
-- TypeScript
 - Twig
+- TypeScript
+- VB / VBScript
+- Verilog / SystemVerilog
 - Vue
+- XML
 - YAML
 
 See [docs/languages.md](docs/languages.md) for more details about the types of comments supported in each language.
