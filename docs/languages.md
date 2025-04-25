@@ -1,6 +1,6 @@
 # Supported languages
 
-Here is the list of supported languages, in which Warrah will remove comments. The languages is detected based on the specifies file extensions or file names.  Please note comments inside strings will also be removed and result in invalid code.
+Here is the list of supported languages in which Warrah will remove comments. Languages are detected based on file extensions or file names. Please note that comments inside strings will also be removed, which may result in invalid code.
 
 - **Ada**
   - Extensions: `.adb`, `.ads`
