@@ -14,7 +14,6 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
                     format!("Duplicate extension: {}", ext),
                 ));
             }
-
             code.push_str(&format!("    (\"{}\", \"{}\"),\n", ext, lang.name));
         }
     }
@@ -35,7 +34,6 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
                     format!("Duplicate filename: {}", filename),
                 ));
             }
-
             code.push_str(&format!("    (\"{}\", \"{}\"),\n", filename, lang.name));
         }
     }
@@ -48,25 +46,28 @@ pub fn generate_language_comments_map(languages: &[Language]) -> io::Result<Stri
     let mut code = String::from("pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[\n");
 
     for lang in languages {
-        code.push_str(&format!("    (\"{}\", CommentConfig {{\n", lang.name));
-        code.push_str("        single_line: vec![\n");
+        code.push_str(&format!("(\"{}\", CommentConfig {{\n", lang.name));
+        code.push_str("single_line: vec![\n");
 
         for comment in &lang.single_line_comments {
-            code.push_str(&format!("            \"{}\".to_string(),\n", comment));
+            code.push_str(&format!("\"{}\".to_string(),\n", comment));
         }
 
-        code.push_str("        ],\n");
-        code.push_str("        multi_line: vec![\n");
+        code.push_str("],\n");
+        code.push_str("multi_line: vec![\n");
 
         for (start, end) in &lang.multi_line_comments {
+            let escaped_start = start.replace("\"", "\\\"");
+            let escaped_end = end.replace("\"", "\\\"");
+
             code.push_str(&format!(
-                "            (\"{}\".to_string(), \"{}\".to_string()),\n",
-                start, end
+                "(\"{}\".to_string(), \"{}\".to_string()),\n",
+                escaped_start, escaped_end
             ));
         }
 
-        code.push_str("        ],\n");
-        code.push_str("    }),\n");
+        code.push_str("],\n");
+        code.push_str("}),\n");
     }
 
     code.push_str("];\n");
@@ -194,32 +195,36 @@ mod tests {
                 multi_line_comments: vec![("/*".to_string(), "*/".to_string())],
             },
             Language {
-                name: "html".to_string(),
+                name: "python".to_string(),
                 extensions: vec![],
                 file_names: vec![],
-                single_line_comments: vec![],
-                multi_line_comments: vec![("<!--".to_string(), "-->".to_string())],
+                single_line_comments: vec!["#".to_string()],
+                multi_line_comments: vec![
+                    ("\"\"\"".to_string(), "\"\"\"".to_string()),
+                    ("'''".to_string(), "'''".to_string()),
+                ],
             },
         ];
 
-        let expected = r#"pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[
-    ("rust", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
-        ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
-        ],
-    }),
-    ("html", CommentConfig {
-        single_line: vec![
-        ],
-        multi_line: vec![
-            ("<!--".to_string(), "-->".to_string()),
-        ],
-    }),
-];
-"#;
+        let expected = "pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[\n\
+(\"rust\", CommentConfig {\n\
+single_line: vec![\n\
+\"//\".to_string(),\n\
+],\n\
+multi_line: vec![\n\
+(\"/*\".to_string(), \"*/\".to_string()),\n\
+],\n\
+}),\n\
+(\"python\", CommentConfig {\n\
+single_line: vec![\n\
+\"#\".to_string(),\n\
+],\n\
+multi_line: vec![\n\
+(\"\\\"\\\"\\\"\".to_string(), \"\\\"\\\"\\\"\".to_string()),\n\
+(\"'''\".to_string(), \"'''\".to_string()),\n\
+],\n\
+}),\n\
+];\n";
 
         assert_eq!(
             generate_language_comments_map(&languages).unwrap(),
