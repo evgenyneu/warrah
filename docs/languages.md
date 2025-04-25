@@ -191,10 +191,10 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Extension: `.pl`
   - Comments: `%`, `/* ... */`
 
-- **Python** (partial)
+- **Python**
   - Extension: `.py`
-  - Comments: `#`
-  - ⚠️ Doesn’t handle `""" docstrings """`
+  - Comments: `#`, `""" ... """`, `''' ... '''`
+  - ⚠️ Triple-quoted strings are treated as docstrings and will be removed, even if used as actual strings.
 
 - **QML (Qt Modeling Language)**
   - Extension: `.qml`

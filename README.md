@@ -11,7 +11,10 @@
 > warrah code.py
 ```
 
-Please note Warrah is a very lazy comments remover because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code. The main use of this utility is to strip comments from code in order to feed it to an LLM, where occassionally incorrect code is fine. Thus the main focus here is on speed, language coverage and simplicity, not correctness.
+Please note Warrah is a very lazy comments remover because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code. The main use of this utility is to strip comments from code in order to feed it to an LLM, where occasionally incorrect code is fine. Thus the main focus here is on speed, low resource usage, language coverage and simplicity, not correctness.
+
+
+## Supported languages
 
 The program supports single and multi-line comments in the following languages:
 
@@ -142,6 +145,7 @@ See contributing guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
 ## What's Warrah?
 
 The warrah, or Falkland Islands wolf (Dusicyon australis), also known as the "Antarctic wolf," was the only native land mammal of the Falkland Islands. It was hunted by settlers for its fur and perceived threat to livestock, leading to its extinction in 1876.
+
 
 <img src='./images/FalklandIslandFox2.jpg' alt='Picture of Falkland Island Fox'>
 
