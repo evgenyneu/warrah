@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_assert_eq_fixture_matches_content() {
-        let expected_path = "javascript/hello.expected.js";
+        let expected_path = "javascript/wow.expected.js";
         let path = fixture_path(expected_path);
 
         // Create the file with known content
@@ -77,6 +77,16 @@ mod tests {
 
         // Test that matching content passes
         assert_eq_fixture("oh wow!", expected_path);
+
+        // Test that non-matching content fails
+        let result = std::panic::catch_unwind(|| {
+            assert_eq_fixture("no way!", expected_path);
+        });
+
+        assert!(
+            result.is_err(),
+            "Expected assert_eq_fixture to panic with non-matching content"
+        );
 
         // Clean up
         fs::remove_file(&path).expect("Failed to remove test file");
