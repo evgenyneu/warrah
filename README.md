@@ -11,7 +11,7 @@
 > warrah code.py
 ```
 
-Please note comments inside strings will also be removed and may result in invalid code. The main use of this code is to strip comments from code in order to feed it to an LLM, where occassionally incorrect code is fine. Thus the main focus here is on speed and simplicity, not correctness.
+Please note Warrah is a very lazy comments remover because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code. The main use of this utility is to strip comments from code in order to feed it to an LLM, where occassionally incorrect code is fine. Thus the main focus here is on speed, language coverage and simplicity, not correctness.
 
 The program supports single and multi-line comments in the following languages:
 
