@@ -76,7 +76,7 @@ fn parse_comments(line: &str, lang: &mut Language) {
         .trim_start_matches("s") // Handle both "Comment" and "Comments"
         .trim_start_matches(": ")
         .split(", ")
-        .map(|s| s.trim().to_string());
+        .map(|s| s.trim().trim_matches('`').to_string());
 
     for comment in comments {
         if comment.contains("...") {
@@ -140,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_comments() {
+    fn test_parse_comments_single_line() {
         let mut lang = Language {
             name: "Test".to_string(),
             extensions: Vec::new(),
@@ -149,15 +149,26 @@ mod tests {
             multi_line_comments: Vec::new(),
         };
 
-        // Test single-line comments
-        parse_comments("- Comments: //, #", &mut lang);
+        parse_comments("- Comments: `//`, `#`", &mut lang);
+
         assert_eq!(
             lang.single_line_comments,
             vec!["//".to_string(), "#".to_string()]
         );
+    }
 
-        // Test multi-line comments
-        parse_comments("- Comments: /* ... */, <!-- ... -->", &mut lang);
+    #[test]
+    fn test_parse_comments_multi_line() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        parse_comments("- Comments: `/* ... */`, `<!-- ... -->`", &mut lang);
+
         assert_eq!(
             lang.multi_line_comments,
             vec![
@@ -165,9 +176,19 @@ mod tests {
                 ("<!--".to_string(), "-->".to_string())
             ]
         );
+    }
 
-        // Test mixed comments
-        parse_comments("- Comments: //, /* ... */, #", &mut lang);
+    #[test]
+    fn test_parse_comments_mixed() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        parse_comments("- Comments: `//`, `/* ... */`, `#`", &mut lang);
         assert_eq!(
             lang.single_line_comments,
             vec!["//".to_string(), "#".to_string()]
