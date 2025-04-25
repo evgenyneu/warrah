@@ -18,77 +18,77 @@ Please note Warrah is a very lazy comments remover because it doesn't fully pars
 
 The program supports single and multi-line comments in the following languages:
 
-- Ada
-- Assembly
-- Bash
-- C
-- C#
-- C++
-- COBOL
-- CMake
-- CoffeeScript
-- CSS
-- D
-- Dart
-- Dockerfile
-- EJS
-- Elixir
-- Elm
-- Erlang
-- F#
-- Fortran
-- Gherkin (Cucumber BDD)
-- Go
-- Gradle
-- Groovy
-- Handlebars / Mustache
-- Haskell
-- Haxe
-- HCL (HashiCorp Configuration Language)
-- HTML
-- INI
-- Java
-- JavaScript
-- Jinja2
-- JSONC (JSON with Comments)
-- JSX / TSX (React)
-- Julia
-- Kotlin
-- LaTeX
-- Less
-- Liquid
-- Lisp / Clojure / Scheme
-- Makefile
-- Markdown
-- MATLAB / Octave
-- Objective-C
-- Org-mode
-- Perl
-- PHP
-- PowerShell
-- Prolog
-- Python
-- QML (Qt Modeling Language)
-- R
-- Rego (Open Policy Agent)
-- Ruby
-- Rust
-- SASS / SCSS
-- Scala
-- Shell
-- SQL
-- Starlark (Bazel build language)
-- Swift
-- Terraform
-- TOML
-- Twig
-- TypeScript
-- VB / VBScript
-- Verilog / SystemVerilog
-- Vue
-- XML
-- YAML
-- Zig
+1. Ada
+1. Assembly
+1. Bash
+1. C
+1. C#
+1. C++
+1. COBOL
+1. CMake
+1. CoffeeScript
+1. CSS
+1. D
+1. Dart
+1. Dockerfile
+1. EJS
+1. Elixir
+1. Elm
+1. Erlang
+1. F#
+1. Fortran
+1. Gherkin (Cucumber BDD)
+1. Go
+1. Gradle
+1. Groovy
+1. Handlebars / Mustache
+1. Haskell
+1. Haxe
+1. HCL (HashiCorp Configuration Language)
+1. HTML
+1. INI
+1. Java
+1. JavaScript
+1. Jinja2
+1. JSONC (JSON with Comments)
+1. JSX / TSX (React)
+1. Julia
+1. Kotlin
+1. LaTeX
+1. Less
+1. Liquid
+1. Lisp / Clojure / Scheme
+1. Makefile
+1. Markdown
+1. MATLAB / Octave
+1. Objective-C
+1. Org-mode
+1. Perl
+1. PHP
+1. PowerShell
+1. Prolog
+1. Python
+1. QML (Qt Modeling Language)
+1. R
+1. Rego (Open Policy Agent)
+1. Ruby
+1. Rust
+1. SASS / SCSS
+1. Scala
+1. Shell
+1. SQL
+1. Starlark (Bazel build language)
+1. Swift
+1. Terraform
+1. TOML
+1. Twig
+1. TypeScript
+1. VB / VBScript
+1. Verilog / SystemVerilog
+1. Vue
+1. XML
+1. YAML
+1. Zig
 
 See [docs/languages.md](docs/languages.md) for more details about the types of comments supported in each language.
 
