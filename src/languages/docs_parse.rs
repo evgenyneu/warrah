@@ -69,3 +69,26 @@ fn parse_filenames(line: &str, lang: &mut Language) {
 
     lang.file_names = filenames;
 }
+
+fn parse_comments(line: &str, lang: &mut Language) {
+    let comments = line
+        .trim_start_matches("- Comment")
+        .trim_start_matches("s") // Handle both "Comment" and "Comments"
+        .trim_start_matches(": ")
+        .split(", ")
+        .map(|s| s.trim().to_string());
+
+    for comment in comments {
+        if comment.contains("...") {
+            // Multi-line comment
+            let parts: Vec<&str> = comment.split("...").collect();
+            if parts.len() == 2 {
+                lang.multi_line_comments
+                    .push((parts[0].trim().to_string(), parts[1].trim().to_string()));
+            }
+        } else {
+            // Single-line comment
+            lang.single_line_comments.push(comment);
+        }
+    }
+}
