@@ -95,3 +95,110 @@ fn parse_comments(line: &str, lang: &mut Language) {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_extensions() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        // Test single extension
+        parse_extensions("- Extension: `.rs`", &mut lang);
+        assert_eq!(lang.extensions, vec![".rs"]);
+
+        // Convert extensions to lowercase
+        parse_extensions("- Extension: `.RS`", &mut lang);
+        assert_eq!(lang.extensions, vec![".rs"]);
+
+        // Test multiple extensions
+        parse_extensions("- Extensions: `.c`, `.cpp`, `.h`", &mut lang);
+        assert_eq!(lang.extensions, vec![".c", ".cpp", ".h"]);
+    }
+
+    #[test]
+    fn test_parse_filenames() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        // Test single filename
+        parse_filenames("- File: `Dockerfile`", &mut lang);
+        assert_eq!(lang.file_names, vec!["dockerfile"]);
+
+        // Test multiple filenames
+        parse_filenames("- Files: `Makefile`, `CMakeLists.txt`", &mut lang);
+        assert_eq!(lang.file_names, vec!["makefile", "cmakelists.txt"]);
+    }
+
+    #[test]
+    fn test_parse_comments_single_line() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        parse_comments("- Comments: `//`, `#`", &mut lang);
+
+        assert_eq!(
+            lang.single_line_comments,
+            vec!["//".to_string(), "#".to_string()]
+        );
+    }
+
+    #[test]
+    fn test_parse_comments_multi_line() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        parse_comments("- Comments: `/* ... */`, `<!-- ... -->`", &mut lang);
+
+        assert_eq!(
+            lang.multi_line_comments,
+            vec![
+                ("/*".to_string(), "*/".to_string()),
+                ("<!--".to_string(), "-->".to_string())
+            ]
+        );
+    }
+
+    #[test]
+    fn test_parse_comments_mixed() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        parse_comments("- Comments: `//`, `/* ... */`, `#`", &mut lang);
+        assert_eq!(
+            lang.single_line_comments,
+            vec!["//".to_string(), "#".to_string()]
+        );
+        assert_eq!(
+            lang.multi_line_comments,
+            vec![("/*".to_string(), "*/".to_string())]
+        );
+    }
+}
