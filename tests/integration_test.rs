@@ -6,11 +6,10 @@ use std::fs;
 use std::io::Read;
 use std::path::PathBuf;
 use std::time::Duration;
-use warrah::test_utils::temp_dir::TempDir;
 
 #[test]
 fn test_main_success_run() {
-    let td: TempDir = TempDir::new().unwrap();
+    // let td: TempDir = TempDir::new().unwrap();
     //     td.mkfile_with_contents("file1.txt", "Hello");
     //     td.mkfile_with_contents("file2.txt", "World!");
 

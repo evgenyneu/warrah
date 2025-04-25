@@ -1,6 +1,5 @@
 use expectrl::spawn;
 use std::io::Read;
-use warrah::test_utils::temp_dir::TempDir;
 
 /// Constructs a command using the `quagga` binary and the provided parameters,
 /// spawns it in a terminal emulator, and returns the captured output.
