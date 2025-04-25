@@ -265,8 +265,3 @@ Here is the list of supported languages, in which Warrah will remove comments. T
 - **Zig**
   - Extension: `.zig`
   - Comments: `//`, `/* ... */`
-
-
-Of course! Here you go, ready to paste in:
-
----
