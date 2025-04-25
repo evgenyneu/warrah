@@ -5,7 +5,7 @@
 
 # Warrah
 
-`warrah` is a command-line utility and a Rust library that naively removes code comments from a text file and outputs the result to stdout:
+`warrah` is a command-line utility and a Rust library that **naively** removes code comments from a text file and outputs the result to stdout:
 
 ```sh
 > warrah code.py
@@ -23,17 +23,22 @@ The program supports single and multi-line comments in the following languages:
 - CMake
 - CoffeeScript
 - CSS
+- D
+- Dart
 - Dockerfile
 - EJS
 - Elixir
+- Elm
 - Erlang
 - F#
 - Fortran
 - Gherkin (Cucumber BDD)
 - Go
 - Gradle
+- Groovy
 - Handlebars / Mustache
 - Haskell
+- Haxe
 - HCL (HashiCorp Configuration Language)
 - HTML
 - INI
@@ -41,6 +46,7 @@ The program supports single and multi-line comments in the following languages:
 - JavaScript
 - Jinja2
 - JSONC (JSON with Comments)
+- JSX / TSX (React)
 - Julia
 - Kotlin
 - LaTeX
@@ -50,6 +56,7 @@ The program supports single and multi-line comments in the following languages:
 - Makefile
 - Markdown
 - MATLAB / Octave
+- Objective-C
 - Org-mode
 - Perl
 - PHP
@@ -76,6 +83,7 @@ The program supports single and multi-line comments in the following languages:
 - Vue
 - XML
 - YAML
+- Zig
 
 See [docs/languages.md](docs/languages.md) for more details about the types of comments supported in each language.
 
