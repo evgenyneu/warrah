@@ -2,7 +2,6 @@ mod common;
 use assert_cmd::Command;
 use common::run_in_terminal;
 use expectrl::{spawn, Eof};
-use serial_test::serial;
 use std::fs;
 use std::io::Read;
 use std::path::PathBuf;

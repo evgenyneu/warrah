@@ -38,4 +38,32 @@ mod tests {
         let path = fixture_path("javascript/hello.js");
         assert_eq!(path, Path::new("tests/fixtures/javascript/hello.js"));
     }
+
+    #[test]
+    fn test_fixture_text() {
+        let content = fixture_text("javascript/hello.js");
+        assert!(content.contains("function hello()"));
+        assert!(content.contains("/* This is a multiline comment"));
+        assert!(content.contains("// This is a single line comment"));
+        assert!(content.contains("// This is an inline comment"));
+    }
+
+    #[test]
+    fn test_assert_eq_fixture_creates_file() {
+        let expected_path = "javascript/hello.expected.js";
+        let path = fixture_path(expected_path);
+
+        // Remove the file if it exists
+        if path.exists() {
+            fs::remove_file(&path).expect("Failed to remove existing file");
+        }
+
+        assert_eq_fixture("hi there :S", expected_path);
+
+        // Verify the file was created with correct content
+        assert!(path.exists(), "Expected file was not created");
+        let content = fs::read_to_string(&path).expect("Failed to read created file");
+        assert_eq!(content, "hi there :S");
+        fs::remove_file(&path).expect("Failed to remove existing file");
+    }
 }
