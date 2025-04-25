@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  build-and-upload:
+    name: Release for ${{ matrix.os }}
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: warrah
+            asset_name: warrah-linux-amd64
+          - os: windows-latest
+            artifact_name: warrah.exe
+            asset_name: warrah-windows-amd64.exe
+          - os: macos-latest
+            artifact_name: warrah
+            asset_name: warrah-macos-amd64
+          - os: macos-latest
+            artifact_name: warrah
+            asset_name: warrah-macos-arm64
+            target: aarch64-apple-darwin
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+        target: ${{ matrix.target }}
+    - name: Build
+      run: |
+        if [ "${{ matrix.target }}" = "aarch64-apple-darwin" ]; then
+          rustup target add aarch64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
+        else
+          cargo build --release
+        fi
+      shell: bash
+    - name: Compress binary
+      run: |
+        cd ${{ matrix.target && format('target/{0}/release', matrix.target) || 'target/release' }}
+        tar -czf ${{ matrix.asset_name }}.tar.gz ${{ matrix.artifact_name }}
+      shell: bash
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ${{ matrix.target && format('./target/{0}/release/{1}.tar.gz', matrix.target, matrix.asset_name) || format('./target/release/{0}.tar.gz', matrix.asset_name) }}
+        asset_name: ${{ matrix.asset_name }}.tar.gz
+        asset_content_type: application/gzip
