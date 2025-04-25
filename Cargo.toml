@@ -15,8 +15,6 @@ categories = ["command-line-utilities", "text-processing"]
 
 
 [dev-dependencies]
-assert_cmd = "2.0"
-expectrl = "0.7"
 
 [lib]
 name = "warrah"
