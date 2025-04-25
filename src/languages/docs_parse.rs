@@ -105,10 +105,11 @@ mod tests {
     fn test_parse_languages_file() {
         let languages = parse_languages_file("docs/languages.md").unwrap();
 
-        // Verify we have some languages
         assert!(!languages.is_empty());
 
-        // Verify some known languages are present
+        // Rust
+        // -----------
+
         let rust = languages.iter().find(|l| l.name == "rust").unwrap();
 
         assert_eq!(rust.extensions, vec![".rs"]);
@@ -118,6 +119,9 @@ mod tests {
             rust.multi_line_comments,
             vec![("/*".to_string(), "*/".to_string())]
         );
+
+        // Python
+        // -----------
 
         let python = languages.iter().find(|l| l.name == "python").unwrap();
         assert_eq!(python.extensions, vec![".py"]);
