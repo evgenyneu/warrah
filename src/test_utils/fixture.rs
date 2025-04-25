@@ -41,7 +41,7 @@ mod tests {
 
     #[test]
     fn test_fixture_text() {
-        let content = fixture_text("javascript/hello.js");
+        let content = fixture_text("javascript/test_utils_fixture.js");
         assert!(content.contains("function hello()"));
         assert!(content.contains("/* This is a multiline comment"));
         assert!(content.contains("// This is a single line comment"));
@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn test_assert_eq_fixture_creates_file() {
-        let expected_path = "javascript/hello.expected.js";
+        let expected_path = "javascript/test_utils_fixture.expected.js";
         let path = fixture_path(expected_path);
 
         // Remove the file if it exists
@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_assert_eq_fixture_matches_content() {
-        let expected_path = "javascript/wow.expected.js";
+        let expected_path = "javascript/test_utils_fixture2.expected.js";
         let path = fixture_path(expected_path);
 
         // Create the file with known content
