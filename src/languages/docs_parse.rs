@@ -101,6 +101,71 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_parse_languages() {
+        let content = r#"
+# Languages
+
+Here are the languages we support
+
+- **Rust**
+  - Extension: `.rs`
+  - Comments: `//`, `/* ... */`
+
+- **Python**
+  - Extensions: `.py`
+  - Comments: `#`, `""" ... """`, `''' ... '''`
+
+- **Dockerfile**
+  - File: `Dockerfile`
+  - Comment: `#`
+
+- **Makefile**
+  - Files: `Makefile`, `CMakeLists.txt`
+  - Comment: `#`
+"#;
+
+        let languages = parse_languages(content);
+        assert_eq!(languages.len(), 4);
+
+        // Test Rust
+        let rust = &languages[0];
+        assert_eq!(rust.name, "Rust");
+        assert_eq!(rust.extensions, vec![".rs"]);
+        assert_eq!(rust.single_line_comments, vec!["//".to_string()]);
+        assert_eq!(
+            rust.multi_line_comments,
+            vec![("/*".to_string(), "*/".to_string())]
+        );
+
+        // Test Python
+        let python = &languages[1];
+        assert_eq!(python.name, "Python");
+        assert_eq!(python.extensions, vec![".py"]);
+        assert_eq!(python.single_line_comments, vec!["#".to_string()]);
+        assert_eq!(
+            python.multi_line_comments,
+            vec![
+                ("\"\"\"".to_string(), "\"\"\"".to_string()),
+                ("'''".to_string(), "'''".to_string())
+            ]
+        );
+
+        // Test Dockerfile
+        let dockerfile = &languages[2];
+        assert_eq!(dockerfile.name, "Dockerfile");
+        assert_eq!(dockerfile.file_names, vec!["dockerfile"]);
+        assert_eq!(dockerfile.single_line_comments, vec!["#".to_string()]);
+        assert_eq!(dockerfile.multi_line_comments, Vec::new());
+
+        // Test Makefile
+        let makefile = &languages[3];
+        assert_eq!(makefile.name, "Makefile");
+        assert_eq!(makefile.file_names, vec!["makefile", "cmakelists.txt"]);
+        assert_eq!(makefile.single_line_comments, vec!["#".to_string()]);
+        assert_eq!(makefile.multi_line_comments, Vec::new());
+    }
+
+    #[test]
     fn test_parse_extensions() {
         let mut lang = Language {
             name: "Test".to_string(),
