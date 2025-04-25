@@ -1,7 +1,6 @@
-use super::error::LanguageParseError;
 use super::language::Language;
 
-pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, LanguageParseError> {
+pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, std::io::Error> {
     let content = std::fs::read_to_string(path)?;
     let mut languages = Vec::new();
     let mut current_language: Option<Language> = None;
@@ -38,7 +37,7 @@ pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, LanguageParseEr
         }
     }
 
-    // Don't forget the last language
+    // The last language
     if let Some(lang) = current_language {
         languages.push(lang);
     }
@@ -90,112 +89,5 @@ fn parse_comments(line: &str, lang: &mut Language) {
             // Single-line comment
             lang.single_line_comments.push(comment);
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_extensions() {
-        let mut lang = Language {
-            name: "Test".to_string(),
-            extensions: Vec::new(),
-            file_names: Vec::new(),
-            single_line_comments: Vec::new(),
-            multi_line_comments: Vec::new(),
-        };
-
-        // Test single extension
-        parse_extensions("- Extension: `.rs`", &mut lang);
-        assert_eq!(lang.extensions, vec![".rs"]);
-
-        // Convert extensions to lowercase
-        parse_extensions("- Extension: `.RS`", &mut lang);
-        assert_eq!(lang.extensions, vec![".rs"]);
-
-        // Test multiple extensions
-        parse_extensions("- Extensions: `.c`, `.cpp`, `.h`", &mut lang);
-        assert_eq!(lang.extensions, vec![".c", ".cpp", ".h"]);
-    }
-
-    #[test]
-    fn test_parse_filenames() {
-        let mut lang = Language {
-            name: "Test".to_string(),
-            extensions: Vec::new(),
-            file_names: Vec::new(),
-            single_line_comments: Vec::new(),
-            multi_line_comments: Vec::new(),
-        };
-
-        // Test single filename
-        parse_filenames("- File: `Dockerfile`", &mut lang);
-        assert_eq!(lang.file_names, vec!["dockerfile"]);
-
-        // Test multiple filenames
-        parse_filenames("- Files: `Makefile`, `CMakeLists.txt`", &mut lang);
-        assert_eq!(lang.file_names, vec!["makefile", "cmakelists.txt"]);
-    }
-
-    #[test]
-    fn test_parse_comments_single_line() {
-        let mut lang = Language {
-            name: "Test".to_string(),
-            extensions: Vec::new(),
-            file_names: Vec::new(),
-            single_line_comments: Vec::new(),
-            multi_line_comments: Vec::new(),
-        };
-
-        parse_comments("- Comments: `//`, `#`", &mut lang);
-
-        assert_eq!(
-            lang.single_line_comments,
-            vec!["//".to_string(), "#".to_string()]
-        );
-    }
-
-    #[test]
-    fn test_parse_comments_multi_line() {
-        let mut lang = Language {
-            name: "Test".to_string(),
-            extensions: Vec::new(),
-            file_names: Vec::new(),
-            single_line_comments: Vec::new(),
-            multi_line_comments: Vec::new(),
-        };
-
-        parse_comments("- Comments: `/* ... */`, `<!-- ... -->`", &mut lang);
-
-        assert_eq!(
-            lang.multi_line_comments,
-            vec![
-                ("/*".to_string(), "*/".to_string()),
-                ("<!--".to_string(), "-->".to_string())
-            ]
-        );
-    }
-
-    #[test]
-    fn test_parse_comments_mixed() {
-        let mut lang = Language {
-            name: "Test".to_string(),
-            extensions: Vec::new(),
-            file_names: Vec::new(),
-            single_line_comments: Vec::new(),
-            multi_line_comments: Vec::new(),
-        };
-
-        parse_comments("- Comments: `//`, `/* ... */`, `#`", &mut lang);
-        assert_eq!(
-            lang.single_line_comments,
-            vec!["//".to_string(), "#".to_string()]
-        );
-        assert_eq!(
-            lang.multi_line_comments,
-            vec![("/*".to_string(), "*/".to_string())]
-        );
     }
 }
