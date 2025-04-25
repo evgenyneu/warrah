@@ -15,11 +15,13 @@ Please note comments inside strings will also be removed and may result in inval
 
 The program supports single and multi-line comments in the following languages:
 
+- Ada
 - Assembly
 - Bash
 - C
 - C#
 - C++
+- COBOL
 - CMake
 - CoffeeScript
 - CSS

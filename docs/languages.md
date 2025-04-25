@@ -2,17 +2,26 @@
 
 Here is the list of supported languages, in which Warrah will remove comments. The languages is detected based on the specifies file extensions or file names.  Please note comments inside strings will also be removed and result in invalid code.
 
+- **Ada**
+  - Extensions: `.adb`, `.ads`
+  - Comments: `--`
+
 - **Assembly**
   - Extensions: `.asm`, `.s`
   - Comments: `;`, `#`
+
+- **C#**
+  - Extension: `.cs`
+  - Comments: `//`, `/* ... */`
 
 - **C / C++**
   - Extensions: `.c`, `.cpp`, `.h`, `.hpp`
   - Comments: `//`, `/* ... */`
 
-- **C#**
-  - Extension: `.cs`
-  - Comments: `//`, `/* ... */`
+- **COBOL**
+  - Extensions: `.cob`, `.cbl`
+  - Comments: `*>`
+  - ⚠️ Only modern comment style supported; fixed-format (column-based) is not handled
 
 - **CMake**
   - File: `CMakeLists.txt`, `.cmake`
