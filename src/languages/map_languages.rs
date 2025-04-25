@@ -35,8 +35,38 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
                     format!("Duplicate filename: {}", filename),
                 ));
             }
+
             code.push_str(&format!("    (\"{}\", \"{}\"),\n", filename, lang.name));
         }
+    }
+
+    code.push_str("];\n");
+    Ok(code)
+}
+
+pub fn generate_language_comments_map(languages: &[Language]) -> io::Result<String> {
+    let mut code = String::from("pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[\n");
+
+    for lang in languages {
+        code.push_str(&format!("    (\"{}\", CommentConfig {{\n", lang.name));
+        code.push_str("        single_line: vec![\n");
+
+        for comment in &lang.single_line_comments {
+            code.push_str(&format!("            \"{}\".to_string(),\n", comment));
+        }
+
+        code.push_str("        ],\n");
+        code.push_str("        multi_line: vec![\n");
+
+        for (start, end) in &lang.multi_line_comments {
+            code.push_str(&format!(
+                "            (\"{}\".to_string(), \"{}\".to_string()),\n",
+                start, end
+            ));
+        }
+
+        code.push_str("        ],\n");
+        code.push_str("    }),\n");
     }
 
     code.push_str("];\n");
@@ -151,5 +181,49 @@ mod tests {
         let result = generate_filename_map(&languages);
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().kind(), io::ErrorKind::InvalidData);
+    }
+
+    #[test]
+    fn test_generate_language_comments_map() {
+        let languages = vec![
+            Language {
+                name: "rust".to_string(),
+                extensions: vec![],
+                file_names: vec![],
+                single_line_comments: vec!["//".to_string()],
+                multi_line_comments: vec![("/*".to_string(), "*/".to_string())],
+            },
+            Language {
+                name: "html".to_string(),
+                extensions: vec![],
+                file_names: vec![],
+                single_line_comments: vec![],
+                multi_line_comments: vec![("<!--".to_string(), "-->".to_string())],
+            },
+        ];
+
+        let expected = r#"pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[
+    ("rust", CommentConfig {
+        single_line: vec![
+            "//".to_string(),
+        ],
+        multi_line: vec![
+            ("/*".to_string(), "*/".to_string()),
+        ],
+    }),
+    ("html", CommentConfig {
+        single_line: vec![
+        ],
+        multi_line: vec![
+            ("<!--".to_string(), "-->".to_string()),
+        ],
+    }),
+];
+"#;
+
+        assert_eq!(
+            generate_language_comments_map(&languages).unwrap(),
+            expected
+        );
     }
 }
