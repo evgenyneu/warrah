@@ -102,6 +102,37 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_parse_languages_file() {
+        let languages = parse_languages_file("docs/languages.md").unwrap();
+
+        // Verify we have some languages
+        assert!(!languages.is_empty());
+
+        // Verify some known languages are present
+        let rust = languages.iter().find(|l| l.name == "rust").unwrap();
+
+        assert_eq!(rust.extensions, vec![".rs"]);
+        assert_eq!(rust.single_line_comments, vec!["//".to_string()]);
+
+        assert_eq!(
+            rust.multi_line_comments,
+            vec![("/*".to_string(), "*/".to_string())]
+        );
+
+        let python = languages.iter().find(|l| l.name == "python").unwrap();
+        assert_eq!(python.extensions, vec![".py"]);
+        assert_eq!(python.single_line_comments, vec!["#".to_string()]);
+
+        assert_eq!(
+            python.multi_line_comments,
+            vec![
+                ("\"\"\"".to_string(), "\"\"\"".to_string()),
+                ("'''".to_string(), "'''".to_string())
+            ]
+        );
+    }
+
+    #[test]
     fn test_parse_languages() {
         let content = r#"
 # Languages
