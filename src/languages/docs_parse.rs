@@ -21,7 +21,8 @@ pub fn parse_languages(content: &str) -> Vec<Language> {
             let name = line
                 .trim_start_matches("- **")
                 .trim_end_matches("**")
-                .to_string();
+                .trim()
+                .to_lowercase();
 
             current_language = Some(Language {
                 name,
@@ -111,7 +112,7 @@ Here are the languages we support
   - Extension: `.rs`
   - Comments: `//`, `/* ... */`
 
-- **Python**
+- **  Python **
   - Extensions: `.py`
   - Comments: `#`, `""" ... """`, `''' ... '''`
 
@@ -129,7 +130,7 @@ Here are the languages we support
 
         // Test Rust
         let rust = &languages[0];
-        assert_eq!(rust.name, "Rust");
+        assert_eq!(rust.name, "rust");
         assert_eq!(rust.extensions, vec![".rs"]);
         assert_eq!(rust.single_line_comments, vec!["//".to_string()]);
         assert_eq!(
@@ -139,7 +140,7 @@ Here are the languages we support
 
         // Test Python
         let python = &languages[1];
-        assert_eq!(python.name, "Python");
+        assert_eq!(python.name, "python");
         assert_eq!(python.extensions, vec![".py"]);
         assert_eq!(python.single_line_comments, vec!["#".to_string()]);
         assert_eq!(
@@ -152,14 +153,14 @@ Here are the languages we support
 
         // Test Dockerfile
         let dockerfile = &languages[2];
-        assert_eq!(dockerfile.name, "Dockerfile");
+        assert_eq!(dockerfile.name, "dockerfile");
         assert_eq!(dockerfile.file_names, vec!["dockerfile"]);
         assert_eq!(dockerfile.single_line_comments, vec!["#".to_string()]);
         assert_eq!(dockerfile.multi_line_comments, Vec::new());
 
         // Test Makefile
         let makefile = &languages[3];
-        assert_eq!(makefile.name, "Makefile");
+        assert_eq!(makefile.name, "makefile");
         assert_eq!(makefile.file_names, vec!["makefile", "cmakelists.txt"]);
         assert_eq!(makefile.single_line_comments, vec!["#".to_string()]);
         assert_eq!(makefile.multi_line_comments, Vec::new());
