@@ -2,11 +2,15 @@ use super::language::Language;
 
 pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, std::io::Error> {
     let content = std::fs::read_to_string(path)?;
+    Ok(parse_languages(&content))
+}
+
+pub fn parse_languages(content: &str) -> Vec<Language> {
     let mut languages = Vec::new();
     let mut current_language: Option<Language> = None;
 
     for line in content.lines() {
-        let line = line.trim().trim();
+        let line = line.trim();
 
         if line.starts_with("- **") && line.ends_with("**") {
             // Start new language
@@ -29,7 +33,7 @@ pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, std::io::Error>
         } else if let Some(lang) = &mut current_language {
             if line.starts_with("- Extension") {
                 parse_extensions(line, lang);
-            } else if line.starts_with("- File:") {
+            } else if line.starts_with("- File") {
                 parse_filenames(line, lang);
             } else if line.starts_with("- Comment") {
                 parse_comments(line, lang);
@@ -42,7 +46,7 @@ pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, std::io::Error>
         languages.push(lang);
     }
 
-    Ok(languages)
+    languages
 }
 
 fn parse_extensions(line: &str, lang: &mut Language) {
