@@ -28,3 +28,14 @@ pub fn assert_eq_fixture(output: &str, expected_fixture_path: &str) {
     let expected = fixture_text(expected_fixture_path);
     assert_eq!(output, expected, "Output doesn't match expected fixture");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_fixture_path() {
+        let path = fixture_path("javascript/hello.js");
+        assert_eq!(path, Path::new("tests/fixtures/javascript/hello.js"));
+    }
+}
