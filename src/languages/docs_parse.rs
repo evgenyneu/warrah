@@ -52,7 +52,7 @@ fn parse_extensions(line: &str, lang: &mut Language) {
         .trim_start_matches("s") // Handle both "Extension" and "Extensions"
         .trim_start_matches(": ")
         .split(", ")
-        .map(|s| s.trim().to_string())
+        .map(|s| s.trim().to_string().to_lowercase())
         .collect();
 
     lang.extensions = extensions;
@@ -90,5 +90,33 @@ fn parse_comments(line: &str, lang: &mut Language) {
             // Single-line comment
             lang.single_line_comments.push(comment);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_extensions() {
+        let mut lang = Language {
+            name: "Test".to_string(),
+            extensions: Vec::new(),
+            file_names: Vec::new(),
+            single_line_comments: Vec::new(),
+            multi_line_comments: Vec::new(),
+        };
+
+        // Test single extension
+        parse_extensions("- Extension: .rs", &mut lang);
+        assert_eq!(lang.extensions, vec![".rs"]);
+
+        // Convert extensions to lowercase
+        parse_extensions("- Extension: .RS", &mut lang);
+        assert_eq!(lang.extensions, vec![".rs"]);
+
+        // Test multiple extensions
+        parse_extensions("- Extensions: .c, .cpp, .h", &mut lang);
+        assert_eq!(lang.extensions, vec![".c", ".cpp", ".h"]);
     }
 }
