@@ -66,4 +66,19 @@ mod tests {
         assert_eq!(content, "hi there :S");
         fs::remove_file(&path).expect("Failed to remove existing file");
     }
+
+    #[test]
+    fn test_assert_eq_fixture_matches_content() {
+        let expected_path = "javascript/hello.expected.js";
+        let path = fixture_path(expected_path);
+
+        // Create the file with known content
+        fs::write(&path, "oh wow!").expect("Failed to write test file");
+
+        // Test that matching content passes
+        assert_eq_fixture("oh wow!", expected_path);
+
+        // Clean up
+        fs::remove_file(&path).expect("Failed to remove test file");
+    }
 }
