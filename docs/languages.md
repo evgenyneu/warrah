@@ -21,10 +21,11 @@ Here is the list of supported languages in which Warrah will remove comments. La
 - **COBOL**
   - Extensions: `.cob`, `.cbl`
   - Comments: `*>`
-  - ⚠️ Only modern comment style supported; fixed-format (column-based) is not handled
+  - ⚠️ Only modern comment style supported; fixed-format (column-based) is not supported
 
 - **CMake**
-  - File: `CMakeLists.txt`, `.cmake`
+  - Extension: `.cmake`
+  - File: `CMakeLists.txt`
   - Comments: `#`
 
 - **CoffeeScript**
@@ -48,7 +49,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `//`, `/* ... */`
 
 - **Dockerfile**
-  - Extension: `Dockerfile`
+  - File: `Dockerfile`
   - Comments: `#`
 
 - **EJS (Embedded JavaScript)**
@@ -201,7 +202,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `//`, `/* ... */`
 
 - **R**
-  - Extension: `.r`, `.R`
+  - Extensions: `.r`, `.R`
   - Comments: `#`
 
 - **Rego (Open Policy Agent)**
@@ -258,13 +259,10 @@ Here is the list of supported languages in which Warrah will remove comments. La
 
 - **Vue**
   - Extension: `.vue`
-  - Comments:
-    - HTML: `<!-- ... -->`
-    - JS: `//`, `/* ... */`
-    - CSS: `/* ... */`
+  - Comments: `//`, `<!-- ... -->`,  `/* ... */`
 
 - **XML**
-  - Extensions: `.xml`, `.xsd`, `.pom`, etc.
+  - Extensions: `.xml`, `.xsd`, `.pom`
   - Comments: `<!-- ... -->`
 
 - **YAML / TOML / INI**
