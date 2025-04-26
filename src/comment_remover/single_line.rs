@@ -25,8 +25,8 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
             result.push_str(line);
         }
 
-        // Add newline if not last line
-        if lines.peek().is_some() {
+        // Add newline if not last line or if input ends with newline
+        if lines.peek().is_some() || content.ends_with('\n') {
             result.push('\n');
         }
     }
