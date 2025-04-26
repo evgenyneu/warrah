@@ -1,3 +1,4 @@
+mod comment_remover;
 mod languages;
 mod process;
 mod test_utils;

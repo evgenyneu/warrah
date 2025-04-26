@@ -5,7 +5,7 @@ use crate::languages::language_maps::{
     get_comments_by_language, get_language_by_extension, get_language_by_filename,
 };
 
-use crate::process::comments_remover::remove_comments;
+use crate::comment_remover::comment_remover::remove_comments;
 
 /// Processes a file by removing comments based on its language.
 /// Returns the processed content as a string.
