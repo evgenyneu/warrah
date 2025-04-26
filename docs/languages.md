@@ -215,6 +215,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Extensions: `.sass`, `.scss`
   - Comments: `//`, `/* ... */`
 
+
 - **Scala**
   - Extension: `.scala`
   - Comments: `//`, `/* ... */`

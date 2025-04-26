@@ -28,8 +28,9 @@ pub fn generate_all_mappings(languages: &[Language]) -> io::Result<String> {
 
 pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
     let mut seen_extensions = HashSet::new();
-    let mut code = String::from("pub static EXTENSION_TO_LANGUAGE: &[(&str, &str)] = &[\n");
+    let mut tuples = Vec::new();
 
+    // First collect all tuples while checking for duplicates
     for lang in languages {
         for ext in &lang.extensions {
             if !seen_extensions.insert(ext) {
@@ -38,8 +39,17 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
                     format!("Duplicate extension: {}", ext),
                 ));
             }
-            code.push_str(&format!("    (\"{}\", \"{}\"),\n", ext, lang.name));
+            tuples.push((ext.as_str(), lang.name.as_str()));
         }
+    }
+
+    // Sort tuples by the extension (first item)
+    tuples.sort_by_key(|&(ext, _)| ext);
+
+    // Generate the code string with sorted tuples
+    let mut code = String::from("pub static EXTENSION_TO_LANGUAGE: &[(&str, &str)] = &[\n");
+    for (ext, lang) in tuples {
+        code.push_str(&format!("    (\"{}\", \"{}\"),\n", ext, lang));
     }
 
     code.push_str("];\n");
@@ -48,8 +58,9 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
 
 pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
     let mut seen_filenames = HashSet::new();
-    let mut code = String::from("pub static FILENAME_TO_LANGUAGE: &[(&str, &str)] = &[\n");
+    let mut tuples = Vec::new();
 
+    // First collect all tuples while checking for duplicates
     for lang in languages {
         for filename in &lang.file_names {
             if !seen_filenames.insert(filename) {
@@ -58,8 +69,17 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
                     format!("Duplicate filename: {}", filename),
                 ));
             }
-            code.push_str(&format!("    (\"{}\", \"{}\"),\n", filename, lang.name));
+            tuples.push((filename.as_str(), lang.name.as_str()));
         }
+    }
+
+    // Sort tuples by the filename (first item)
+    tuples.sort_by_key(|&(filename, _)| filename);
+
+    // Generate the code string with sorted tuples
+    let mut code = String::from("pub static FILENAME_TO_LANGUAGE: &[(&str, &str)] = &[\n");
+    for (filename, lang) in tuples {
+        code.push_str(&format!("    (\"{}\", \"{}\"),\n", filename, lang));
     }
 
     code.push_str("];\n");
@@ -142,7 +162,7 @@ mod tests {
     }
 
     #[test]
-    fn test_generate_extension_map() {
+    fn test_generate_extension_map_sorted_by_extension() {
         let languages = vec![
             Language {
                 name: "rust".to_string(),
@@ -161,9 +181,9 @@ mod tests {
         ];
 
         let expected = r#"pub static EXTENSION_TO_LANGUAGE: &[(&str, &str)] = &[
-    (".rs", "rust"),
     (".py", "python"),
     (".pyi", "python"),
+    (".rs", "rust"),
 ];
 "#;
 
@@ -195,28 +215,28 @@ mod tests {
     }
 
     #[test]
-    fn test_generate_filename_map() {
+    fn test_generate_filename_map_sorted_by_filename() {
         let languages = vec![
             Language {
                 name: "dockerfile".to_string(),
                 extensions: vec![],
-                file_names: vec!["Dockerfile".to_string()],
+                file_names: vec!["dockerfile".to_string()],
                 single_line_comments: vec![],
                 multi_line_comments: vec![],
             },
             Language {
                 name: "makefile".to_string(),
                 extensions: vec![],
-                file_names: vec!["Makefile".to_string(), "CMakeLists.txt".to_string()],
+                file_names: vec!["makefile".to_string(), "cmakelists.txt".to_string()],
                 single_line_comments: vec![],
                 multi_line_comments: vec![],
             },
         ];
 
         let expected = r#"pub static FILENAME_TO_LANGUAGE: &[(&str, &str)] = &[
-    ("Dockerfile", "dockerfile"),
-    ("Makefile", "makefile"),
-    ("CMakeLists.txt", "makefile"),
+    ("cmakelists.txt", "makefile"),
+    ("dockerfile", "dockerfile"),
+    ("makefile", "makefile"),
 ];
 "#;
 
@@ -229,14 +249,14 @@ mod tests {
             Language {
                 name: "dockerfile".to_string(),
                 extensions: vec![],
-                file_names: vec!["Dockerfile".to_string()],
+                file_names: vec!["dockerfile".to_string()],
                 single_line_comments: vec![],
                 multi_line_comments: vec![],
             },
             Language {
                 name: "makefile".to_string(),
                 extensions: vec![],
-                file_names: vec!["Dockerfile".to_string()], // Duplicate filename
+                file_names: vec!["dockerfile".to_string()], // Duplicate filename
                 single_line_comments: vec![],
                 multi_line_comments: vec![],
             },
