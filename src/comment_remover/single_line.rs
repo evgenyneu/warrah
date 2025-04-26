@@ -7,14 +7,21 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     while let Some(c) = chars.next() {
         let mut is_comment = false;
 
-        for marker in markers {
+        'marker_check: for marker in markers {
             if c == marker.chars().next().unwrap() {
-                // Check rest of marker by peeking
-                let mut marker_chars = marker.chars();
-                marker_chars.next(); // Skip first char as we already matched it
+                // Check if next characters match rest of marker without consuming
+                let mut peek_iter = chars.clone();
 
-                let mut chars_peek = chars.clone();
-                if marker_chars.all(|mc| chars_peek.next().map_or(false, |c| c == mc)) {
+                let marker_matches = marker[1..]
+                    .chars()
+                    .all(|mc| peek_iter.next().map_or(false, |c| c == mc));
+
+                if marker_matches {
+                    // Advance the real iterator past the marker
+                    for _ in 1..marker.len() {
+                        chars.next();
+                    }
+
                     // Skip until newline
                     while let Some(ch) = chars.next() {
                         if ch == '\n' {
@@ -22,8 +29,9 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
                             break;
                         }
                     }
+
                     is_comment = true;
-                    break;
+                    break 'marker_check;
                 }
             }
         }
