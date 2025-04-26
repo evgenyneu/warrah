@@ -7,6 +7,7 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
 
     let mut result = String::with_capacity(content.len());
     let mut lines = content.lines().peekable();
+    let has_trailing_newline = content.ends_with('\n');
 
     while let Some(line) = lines.next() {
         let mut comment_start = None;
@@ -26,7 +27,7 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
         }
 
         // Add newline if not last line or if input ends with newline
-        if lines.peek().is_some() || content.ends_with('\n') {
+        if lines.peek().is_some() || has_trailing_newline {
             result.push('\n');
         }
     }
