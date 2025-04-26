@@ -119,7 +119,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `//`, `/* ... */`
 
 - **Jinja2**
-  - Extensions: `.jinja`, `.j2`, `.html`
+  - Extensions: `.jinja`, `.j2`
   - Comments: `{# ... #}`
 
 - **JSONC (JSON with Comments)**
@@ -166,13 +166,9 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Extension: `.md`
   - Comments: `<!-- ... -->`
 
-- **MATLAB / Octave**
-  - Extension: `.m`
-  - Comments: `%`
-
-- **Objective-C**
-  - Extensions: `.m`, `.mm`, `.h`
-  - Comments: `//`, `/* ... */`
+- **Objective-C, MATLAB**
+  - Extensions: `.m`, `.mm`
+  - Comments: `//`, `%`, `/* ... */`
 
 - **Org-mode**
   - Extension: `.org`
@@ -190,10 +186,6 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Extension: `.ps1`
   - Comments: `#`, `<# ... #>`
 
-- **Prolog**
-  - Extension: `.pl`
-  - Comments: `%`, `/* ... */`
-
 - **Python**
   - Extension: `.py`
   - Comments: `#`, `""" ... """`, `''' ... '''`
@@ -204,7 +196,7 @@ Here is the list of supported languages in which Warrah will remove comments. La
   - Comments: `//`, `/* ... */`
 
 - **R**
-  - Extensions: `.r`, `.R`
+  - Extensions: `.r`
   - Comments: `#`
 
 - **Rego (Open Policy Agent)**

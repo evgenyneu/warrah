@@ -16,6 +16,7 @@ pub fn generate_all_mappings(languages: &[Language]) -> io::Result<String> {
     let mut result =
         String::from("// The code was automatically generated from docs/languages.md\n\n");
 
+    result.push_str("use super::comment_config::CommentConfig;\n\n");
     result.push_str(&extension_map);
     result.push_str("\n");
     result.push_str(&filename_map);
