@@ -35,6 +35,8 @@ For a complete list of supported languages and their comment syntax, please see 
 
 ## Installation
 
+There are three ways to install Warrah.
+
 ### Install using Cargo
 
 First [install Rust](https://www.rust-lang.org/tools/install), then run:
@@ -54,7 +56,7 @@ brew install warrah
 
 ### Pre-built binaries
 
-Download pre-built binaries from the [GitHub Releases page](https://github.com/evgenyneu/warrah/releases).
+Download a pre-built binary from the [GitHub Releases page](https://github.com/evgenyneu/warrah/releases).
 
 1. Download the appropriate version for your platform.
 2. Move the binary to a location in your PATH.
