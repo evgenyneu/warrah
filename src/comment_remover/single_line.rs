@@ -9,12 +9,12 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
 
         for marker in markers {
             if c == marker.chars().next().unwrap() {
-                // Peek ahead to check if rest of marker matches
+                // Check rest of marker by peeking
                 let mut marker_chars = marker.chars();
                 marker_chars.next(); // Skip first char as we already matched it
-                let mut chars_clone = chars.clone();
 
-                if marker_chars.all(|mc| chars_clone.next().map_or(false, |c| c == mc)) {
+                let mut chars_peek = chars.clone();
+                if marker_chars.all(|mc| chars_peek.next().map_or(false, |c| c == mc)) {
                     // Skip until newline
                     while let Some(ch) = chars.next() {
                         if ch == '\n' {
@@ -22,7 +22,6 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
                             break;
                         }
                     }
-
                     is_comment = true;
                     break;
                 }
