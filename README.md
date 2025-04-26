@@ -16,81 +16,20 @@ Please note Warrah is a very lazy comments remover because it doesn't fully pars
 
 ## Supported languages
 
-The program supports single and multi-line comments in the following languages:
+Warrah supports single and multi-line comments in over 70 programming and markup languages, including popular ones like:
 
-1. Ada
-1. Assembly
-1. Bash
-1. C
-1. C#
-1. C++
-1. COBOL
-1. CMake
-1. CoffeeScript
-1. CSS
-1. D
-1. Dart
-1. Dockerfile
-1. EJS
-1. Elixir
-1. Elm
-1. Erlang
-1. F#
-1. Fortran
-1. Gherkin (Cucumber BDD)
-1. Go
-1. Gradle
-1. Groovy
-1. Handlebars / Mustache
-1. Haskell
-1. Haxe
-1. HCL (HashiCorp Configuration Language)
-1. HTML
-1. INI
-1. Java
-1. JavaScript
-1. Jinja2
-1. JSONC (JSON with Comments)
-1. JSX / TSX (React)
-1. Julia
-1. Kotlin
-1. LaTeX
-1. Less
-1. Liquid
-1. Lisp / Clojure / Scheme
-1. Makefile
-1. Markdown
-1. MATLAB / Octave
-1. Objective-C
-1. Org-mode
-1. Perl
-1. PHP
-1. PowerShell
-1. Prolog
-1. Python
-1. QML (Qt Modeling Language)
-1. R
-1. Rego (Open Policy Agent)
-1. Ruby
-1. Rust
-1. SASS / SCSS
-1. Scala
-1. Shell
-1. SQL
-1. Starlark (Bazel build language)
-1. Swift
-1. Terraform
-1. TOML
-1. Twig
-1. TypeScript
-1. VB / VBScript
-1. Verilog / SystemVerilog
-1. Vue
-1. XML
-1. YAML
-1. Zig
+* Python
+* JavaScript/TypeScript
+* Rust
+* Java
+* C/C++
+* Go
+* Ruby
+* HTML/CSS
+* Shell scripts
+* and many more...
 
-See [docs/languages.md](docs/languages.md) for more details about the types of comments supported in each language.
+For a complete list of supported languages and their comment syntax, please see [docs/languages.md](docs/languages.md).
 
 ## Installation
 
