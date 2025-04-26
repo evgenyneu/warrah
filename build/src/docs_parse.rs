@@ -103,9 +103,9 @@ mod tests {
 
     #[test]
     fn test_parse_languages_file() {
-        let languages = parse_languages_file("docs/languages.md").unwrap();
+        let languages = parse_languages_file("tests/fixtures/languages.md").unwrap();
 
-        assert!(!languages.is_empty());
+        assert_eq!(languages.len(), 2);
 
         // Rust
         // -----------

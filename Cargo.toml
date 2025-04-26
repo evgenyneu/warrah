@@ -11,8 +11,17 @@ documentation = "https://docs.rs/warrah"
 keywords = ["text", "CLI", "LLM"]
 categories = ["command-line-utilities", "text-processing"]
 
+[workspace]
+members = [
+    ".",
+    "build"
+]
+
 [dependencies]
 lazy_static = "1.4"
+
+[build-dependencies]
+build-script = { path = "build" }
 
 [dev-dependencies]
 
