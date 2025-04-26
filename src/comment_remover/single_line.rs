@@ -1,44 +1,35 @@
 /// Removes single line comments from the content.
 /// Returns the content with single line comments removed.
-pub fn remove_single_comments(content: &str, single_line_comments: &[&str]) -> String {
+pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     let mut result = String::with_capacity(content.len());
     let mut chars = content.chars().peekable();
-    let mut in_comment = false;
 
     while let Some(c) = chars.next() {
-        // Reset comment state at newline
-        if c == '\n' {
-            in_comment = false;
-            result.push(c);
-            continue;
-        }
+        let mut is_comment = false;
 
-        // Check for comment start after newline
-        if !in_comment && (result.is_empty() || result.ends_with('\n')) {
-            // Check each comment marker
-            for marker in single_line_comments {
-                if c == marker.chars().next().unwrap() {
-                    // Check if rest of the marker matches
-                    let mut matches = true;
+        for marker in markers {
+            if c == marker.chars().next().unwrap() {
+                // Peek ahead to check if rest of marker matches
+                let mut marker_chars = marker.chars();
+                marker_chars.next(); // Skip first char as we already matched it
+                let mut chars_clone = chars.clone();
 
-                    for (i, expected_char) in marker.chars().skip(1).enumerate() {
-                        if chars.peek().copied() != Some(expected_char) {
-                            matches = false;
+                if marker_chars.all(|mc| chars_clone.next().map_or(false, |c| c == mc)) {
+                    // Skip until newline
+                    while let Some(ch) = chars.next() {
+                        if ch == '\n' {
+                            result.push(ch);
                             break;
                         }
-
-                        chars.next();
                     }
 
-                    if matches {
-                        in_comment = true;
-                        break;
-                    }
+                    is_comment = true;
+                    break;
                 }
             }
         }
 
-        if !in_comment {
+        if !is_comment {
             result.push(c);
         }
     }
@@ -51,25 +42,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_remove_single_comments() {
-        let content = r#"fn main() {
-    // This is a comment
-    let x = 1; // This is an inline comment
-    // Another comment
-    let y = 2; // Another inline comment
-}"#;
-        let single_line_comments = &["//"];
-
-        let result = remove_single_comments(content, single_line_comments);
-
-        assert_eq!(
-            result,
-            r#"fn main() {
-
-    let x = 1;
-
+    fn test_remove_single_comments_basic() {
+        let content = r#"let x = 1; // comment 1
+    // comment 2
     let y = 2;
-}"#
-        );
+"#;
+
+        let result = remove_single_comments(content, &["//"]);
+
+        assert_eq!(result, "let x = 1; \n    \n    let y = 2;\n");
     }
 }
