@@ -151,33 +151,4 @@ mod tests {
         let result = remove_single_comments(content, &["//", "///"]);
         assert_eq!(result, "let x = 1; \nlet y = 2;");
     }
-
-    #[test]
-    fn test_single_line_comment_removal_performance() {
-        use std::time::Instant;
-        println!("== Single line comment removal performance");
-
-        // Generate large content with comments
-        let mut content = String::with_capacity(1024 * 1024);
-
-        for i in 0..10000 {
-            content.push_str(&format!("let x{} = {}; // comment {}\n", i, i, i));
-        }
-
-        println!(
-            "Input size: {:.2} MB",
-            content.len() as f64 / (1024.0 * 1024.0)
-        );
-
-        let start = Instant::now();
-        let result = remove_single_comments(&content, &["//", "<--"]);
-        let duration = start.elapsed();
-
-        println!(
-            "Output size: {:.2} MB",
-            result.len() as f64 / (1024.0 * 1024.0)
-        );
-
-        println!("Processed in {:?}", duration);
-    }
 }
