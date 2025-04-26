@@ -15,30 +15,23 @@ pub fn remove_single_comments(content: &str, single_line_comments: &[&str]) -> S
 
         // Check for comment start after newline
         if !in_comment && (result.is_empty() || result.ends_with('\n')) {
-            // Store current position
-            let mut temp_chars = chars.clone();
-            let current_char = c;
-
             // Check each comment marker
             for marker in single_line_comments {
-                if current_char == marker.chars().next().unwrap() {
+                if c == marker.chars().next().unwrap() {
                     // Check if rest of the marker matches
                     let mut matches = true;
-                    for expected_char in marker.chars().skip(1) {
-                        match temp_chars.next() {
-                            Some(ch) if ch == expected_char => continue,
-                            _ => {
-                                matches = false;
-                                break;
-                            }
+
+                    for (i, expected_char) in marker.chars().skip(1).enumerate() {
+                        if chars.peek().copied() != Some(expected_char) {
+                            matches = false;
+                            break;
                         }
+
+                        chars.next();
                     }
+
                     if matches {
                         in_comment = true;
-                        // Advance the real iterator
-                        for _ in 0..marker.len() - 1 {
-                            chars.next();
-                        }
                         break;
                     }
                 }
@@ -51,4 +44,32 @@ pub fn remove_single_comments(content: &str, single_line_comments: &[&str]) -> S
     }
 
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_remove_single_comments() {
+        let content = r#"fn main() {
+    // This is a comment
+    let x = 1; // This is an inline comment
+    // Another comment
+    let y = 2; // Another inline comment
+}"#;
+        let single_line_comments = &["//"];
+
+        let result = remove_single_comments(content, single_line_comments);
+
+        assert_eq!(
+            result,
+            r#"fn main() {
+
+    let x = 1;
+
+    let y = 2;
+}"#
+        );
+    }
 }
