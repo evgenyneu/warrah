@@ -18,7 +18,7 @@ The main use of this utility is to strip comments from code in order to feed it 
 
 ## Supported languages
 
-Warrah supports single and multi-line comments in over 70 programming and markup languages, including popular ones like:
+Warrah supports single and multi-line comments in over 60 programming and markup languages, including popular ones like:
 
 * Python
 * JavaScript/TypeScript
