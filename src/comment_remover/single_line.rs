@@ -72,6 +72,13 @@ mod tests {
     }
 
     #[test]
+    fn test_no_newline_after_comment() {
+        let content = "let x = 1; // comment"; // no newline at end
+        let result = remove_single_comments(content, &["//"]);
+        assert_eq!(result, "let x = 1; ");
+    }
+
+    #[test]
     fn test_multiple_comment_same_line() {
         let content = r#"let x = 1; // comment 1 // comment 2
     let y = 2;////"#;
@@ -108,5 +115,40 @@ mod tests {
         let result = remove_single_comments(content, &["//", "`"]);
 
         assert_eq!(result, "let x = 1; ");
+    }
+
+    #[test]
+    fn test_empty_input() {
+        let content = "";
+        let result = remove_single_comments(content, &["//"]);
+        assert_eq!(result, "");
+    }
+
+    #[test]
+    fn test_empty_markers() {
+        let content = "let x = 1; // comment";
+        let result = remove_single_comments(content, &[]);
+        assert_eq!(result, "let x = 1; // comment");
+    }
+
+    #[test]
+    fn test_comment_at_start() {
+        let content = "// comment\nlet x = 1;";
+        let result = remove_single_comments(content, &["//"]);
+        assert_eq!(result, "\nlet x = 1;");
+    }
+
+    #[test]
+    fn test_unicode_in_comment() {
+        let content = "let x = 1; // 你好\nlet y = 2;";
+        let result = remove_single_comments(content, &["//"]);
+        assert_eq!(result, "let x = 1; \nlet y = 2;");
+    }
+
+    #[test]
+    fn test_nested_markers() {
+        let content = "let x = 1; /// comment\nlet y = 2;";
+        let result = remove_single_comments(content, &["//", "///"]);
+        assert_eq!(result, "let x = 1; \nlet y = 2;");
     }
 }
