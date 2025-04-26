@@ -18,7 +18,6 @@ members = [
 ]
 
 [dependencies]
-lazy_static = "1.4"
 
 [build-dependencies]
 build-script = { path = "build" }
