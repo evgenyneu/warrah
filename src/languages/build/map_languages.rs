@@ -71,17 +71,17 @@ pub fn generate_language_comments_map(languages: &[Language]) -> io::Result<Stri
 
     for lang in languages {
         code.push_str(&format!("    (\"{}\", CommentConfig {{\n", lang.name));
-        code.push_str("        single_line: vec![\n");
+        code.push_str("        single_line: &[\n");
         for comment in &lang.single_line_comments {
-            code.push_str(&format!("            \"{}\".to_string(),\n", comment));
+            code.push_str(&format!("            \"{}\",\n", comment));
         }
         code.push_str("        ],\n");
-        code.push_str("        multi_line: vec![\n");
+        code.push_str("        multi_line: &[\n");
         for (start, end) in &lang.multi_line_comments {
             let escaped_start = start.replace("\"", "\\\"");
             let escaped_end = end.replace("\"", "\\\"");
             code.push_str(&format!(
-                "            (\"{}\".to_string(), \"{}\".to_string()),\n",
+                "            (\"{}\", \"{}\"),\n",
                 escaped_start, escaped_end
             ));
         }
@@ -271,20 +271,20 @@ mod tests {
 
         let expected = r###"pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[
     ("rust", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("python", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
-            ("\"\"\"".to_string(), "\"\"\"".to_string()),
-            ("'''".to_string(), "'''".to_string()),
+        multi_line: &[
+            ("\"\"\"", "\"\"\""),
+            ("'''", "'''"),
         ],
     }),
 ];

@@ -1,5 +1,5 @@
 mod languages {
-    include!("src/languages/mod.rs");
+    include!("src/languages/build/mod.rs");
 }
 
 fn main() {

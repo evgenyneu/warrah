@@ -1,4 +1,4 @@
 pub struct CommentConfig {
-    pub single_line: Vec<String>,
-    pub multi_line: Vec<(String, String)>,
+    pub single_line: &'static [&'static str],
+    pub multi_line: &'static [(&'static str, &'static str)],
 }

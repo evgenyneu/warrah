@@ -115,488 +115,488 @@ pub static FILENAME_TO_LANGUAGE: &[(&str, &str)] = &[
 
 pub static LANGUAGE_TO_COMMENTS: &[(&str, CommentConfig)] = &[
     ("ada", CommentConfig {
-        single_line: vec![
-            "--".to_string(),
+        single_line: &[
+            "--",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("assembly", CommentConfig {
-        single_line: vec![
-            ";".to_string(),
-            "#".to_string(),
+        single_line: &[
+            ";",
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("c#", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("c / c++", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("cobol", CommentConfig {
-        single_line: vec![
-            "*>".to_string(),
+        single_line: &[
+            "*>",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("cmake", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("coffeescript", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
-            ("###".to_string(), "###".to_string()),
+        multi_line: &[
+            ("###", "###"),
         ],
     }),
     ("css", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("config files / scripting (misc)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("d", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("dart", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("dockerfile", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("ejs (embedded javascript)", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("<%--".to_string(), "--%>".to_string()),
+        multi_line: &[
+            ("<%--", "--%>"),
         ],
     }),
     ("elixir / erlang", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("elm", CommentConfig {
-        single_line: vec![
-            "--".to_string(),
+        single_line: &[
+            "--",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("f#", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("fortran", CommentConfig {
-        single_line: vec![
-            "!".to_string(),
+        single_line: &[
+            "!",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("gherkin (cucumber bdd)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("go", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("gradle", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("groovy", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("handlebars / mustache", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("{{!".to_string(), "}}".to_string()),
+        multi_line: &[
+            ("{{!", "}}"),
         ],
     }),
     ("haskell", CommentConfig {
-        single_line: vec![
-            "--".to_string(),
+        single_line: &[
+            "--",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("haxe", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("hcl (hashicorp configuration language)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
-            "//".to_string(),
+        single_line: &[
+            "#",
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("html", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("<!--".to_string(), "-->".to_string()),
+        multi_line: &[
+            ("<!--", "-->"),
         ],
     }),
     ("java", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("javascript / typescript", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("jinja2", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("{#".to_string(), "#}".to_string()),
+        multi_line: &[
+            ("{#", "#}"),
         ],
     }),
     ("jsonc (json with comments)", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("jsx / tsx (react)", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("julia", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("kotlin", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("latex", CommentConfig {
-        single_line: vec![
-            "%".to_string(),
+        single_line: &[
+            "%",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("less", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("lisp / clojure / scheme", CommentConfig {
-        single_line: vec![
-            ";".to_string(),
+        single_line: &[
+            ";",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("liquid", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("{% comment %}".to_string(), "{% endcomment %}".to_string()),
+        multi_line: &[
+            ("{% comment %}", "{% endcomment %}"),
         ],
     }),
     ("makefile", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("markdown", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("<!--".to_string(), "-->".to_string()),
+        multi_line: &[
+            ("<!--", "-->"),
         ],
     }),
     ("objective-c, matlab", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
-            "%".to_string(),
+        single_line: &[
+            "//",
+            "%",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("org-mode", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("perl", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("php", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
-            "#".to_string(),
+        single_line: &[
+            "//",
+            "#",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("powershell", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
-            ("<#".to_string(), "#>".to_string()),
+        multi_line: &[
+            ("<#", "#>"),
         ],
     }),
     ("python", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
-            ("\"\"\"".to_string(), "\"\"\"".to_string()),
-            ("'''".to_string(), "'''".to_string()),
+        multi_line: &[
+            ("\"\"\"", "\"\"\""),
+            ("'''", "'''"),
         ],
     }),
     ("qml (qt modeling language)", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("r", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("rego (open policy agent)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("ruby", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("rust", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("sass / scss", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("scala", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("shell / bash", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("starlark (bazel build language)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("swift", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("sql", CommentConfig {
-        single_line: vec![
-            "--".to_string(),
+        single_line: &[
+            "--",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("terraform (hcl)", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
-            "//".to_string(),
+        single_line: &[
+            "#",
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("twig", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("{#".to_string(), "#}".to_string()),
+        multi_line: &[
+            ("{#", "#}"),
         ],
     }),
     ("verilog / systemverilog", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
     ("vb / vbscript", CommentConfig {
-        single_line: vec![
-            "'".to_string(),
+        single_line: &[
+            "'",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("vue", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("<!--".to_string(), "-->".to_string()),
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("<!--", "-->"),
+            ("/*", "*/"),
         ],
     }),
     ("xml", CommentConfig {
-        single_line: vec![
+        single_line: &[
         ],
-        multi_line: vec![
-            ("<!--".to_string(), "-->".to_string()),
+        multi_line: &[
+            ("<!--", "-->"),
         ],
     }),
     ("yaml / toml / ini", CommentConfig {
-        single_line: vec![
-            "#".to_string(),
+        single_line: &[
+            "#",
         ],
-        multi_line: vec![
+        multi_line: &[
         ],
     }),
     ("zig", CommentConfig {
-        single_line: vec![
-            "//".to_string(),
+        single_line: &[
+            "//",
         ],
-        multi_line: vec![
-            ("/*".to_string(), "*/".to_string()),
+        multi_line: &[
+            ("/*", "*/"),
         ],
     }),
 ];
