@@ -2,6 +2,9 @@ mod languages;
 mod process;
 mod test_utils;
 
+use crate::process::file_path::process_from_file_path;
+use std::path::PathBuf;
+
 fn print_help() {
     println!("warrah - removes comments from code files");
     println!("\nUsage: warrah [PATH]");
@@ -21,6 +24,13 @@ fn main() {
         std::process::exit(1);
     }
 
-    let file_path = &args[1];
-    // TODO: Process the file
+    let file_path = PathBuf::from(&args[1]);
+
+    match process_from_file_path(file_path) {
+        Ok(content) => print!("{}", content),
+        Err(error) => {
+            eprintln!("Error: {}", error);
+            std::process::exit(1);
+        }
+    }
 }
