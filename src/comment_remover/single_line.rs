@@ -1,43 +1,33 @@
 /// Removes single line comments from the content.
 /// Returns the content with single line comments removed.
 pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
+    if markers.is_empty() {
+        return content.to_string();
+    }
+
     let mut result = String::with_capacity(content.len());
-    let mut chars = content.chars().peekable();
+    let mut lines = content.lines().peekable();
 
-    while let Some(c) = chars.next() {
-        let mut is_comment = false;
+    while let Some(line) = lines.next() {
+        let mut comment_start = None;
 
-        'marker_check: for marker in markers {
-            if c == marker.chars().next().unwrap() {
-                // Check if next characters match rest of marker without consuming
-                let mut peek_iter = chars.clone();
-
-                let marker_matches = marker[1..]
-                    .chars()
-                    .all(|mc| peek_iter.next().map_or(false, |c| c == mc));
-
-                if marker_matches {
-                    // Advance the real iterator past the marker
-                    for _ in 1..marker.len() {
-                        chars.next();
-                    }
-
-                    // Skip until newline
-                    while let Some(ch) = chars.next() {
-                        if ch == '\n' {
-                            result.push(ch);
-                            break;
-                        }
-                    }
-
-                    is_comment = true;
-                    break 'marker_check;
-                }
+        // Find earliest comment marker in the line
+        for marker in markers {
+            if let Some(pos) = line.find(marker) {
+                comment_start = comment_start.map_or(Some(pos), |p: usize| Some(p.min(pos)));
             }
         }
 
-        if !is_comment {
-            result.push(c);
+        // Add line up to comment or whole line if no comment
+        if let Some(pos) = comment_start {
+            result.push_str(&line[..pos]);
+        } else {
+            result.push_str(line);
+        }
+
+        // Add newline if not last line
+        if lines.peek().is_some() {
+            result.push('\n');
         }
     }
 
@@ -56,6 +46,18 @@ mod tests {
 "#;
 
         let result = remove_single_comments(content, &["//"]);
+
+        assert_eq!(result, "let x = 1; \n    \n    let y = 2;\n");
+    }
+
+    #[test]
+    fn test_remove_single_comments_with_single_character_markers() {
+        let content = r#"let x = 1; # comment 1
+    # comment 2
+    let y = 2;
+"#;
+
+        let result = remove_single_comments(content, &["#"]);
 
         assert_eq!(result, "let x = 1; \n    \n    let y = 2;\n");
     }
