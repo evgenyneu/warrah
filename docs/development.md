@@ -20,6 +20,14 @@ Change directory to the root of the project:
 cd warrah
 ```
 
+## Running tests
+
+Run both project and build tests:
+
+```bash
+cargo test --workspace
+```
+
 ## VSCode extensions
 
 Here are some recommended extensions for VS Code
