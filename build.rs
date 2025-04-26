@@ -1,5 +1,5 @@
-mod languages {
-    include!("src/languages/build/mod.rs");
+mod build_mappings {
+    include!("src/build_mappings/mod.rs");
 }
 
 fn main() {
@@ -12,7 +12,8 @@ fn main() {
     std::fs::create_dir_all(std::path::Path::new(output_path).parent().unwrap())
         .expect("Failed to create generated directory");
 
-    if let Err(e) = languages::map_languages::generate_and_save_all_mappings(doc_path, output_path)
+    if let Err(e) =
+        build_mappings::map_languages::generate_and_save_all_mappings(doc_path, output_path)
     {
         panic!("Failed to generate language mappings: {}", e);
     }
