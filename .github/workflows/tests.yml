@@ -24,3 +24,4 @@ jobs:
           CI: true
         with:
           command: test
+          args: --workspace
