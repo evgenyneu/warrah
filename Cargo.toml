@@ -23,6 +23,7 @@ members = [
 build-script = { path = "build" }
 
 [dev-dependencies]
+criterion = "0.5.1"
 
 [lib]
 name = "warrah"
@@ -31,3 +32,7 @@ path = "src/lib.rs"
 [[bin]]
 name = "warrah"
 path = "src/main.rs"
+
+[[bench]]
+name = "comment_remover"
+harness = false
