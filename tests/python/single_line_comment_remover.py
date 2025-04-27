@@ -1,12 +1,13 @@
 def remove_single_comments(content: str, markers: list[str]) -> str:
     if not markers:
         return content
+    if not content:
+        return ""
 
     result = []
-    lines = content.splitlines()
     has_trailing_newline = content.endswith('\n')
 
-    for i, line in enumerate(lines):
+    for line in content.splitlines():
         comment_start = None
 
         # Find earliest comment marker in the line
@@ -21,9 +22,11 @@ def remove_single_comments(content: str, markers: list[str]) -> str:
         else:
             result.append(line)
 
-        # Add newline if not last line or if input ends with newline
-        if i < len(lines) - 1 or has_trailing_newline:
-            result.append('\n')
+        result.append('\n')
+
+    # Remove the last newline if it's not present in the original content
+    if not has_trailing_newline and result:  # Check if result is not empty
+        result.pop()
 
     return ''.join(result)
 

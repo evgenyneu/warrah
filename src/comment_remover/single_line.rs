@@ -42,29 +42,6 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::alloc::{GlobalAlloc, System};
-    use std::sync::atomic::{AtomicUsize, Ordering};
-
-    // Track memory allocations
-    static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
-    static FREED: AtomicUsize = AtomicUsize::new(0);
-
-    struct MemoryTracker;
-
-    unsafe impl GlobalAlloc for MemoryTracker {
-        unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
-            ALLOCATED.fetch_add(layout.size(), Ordering::SeqCst);
-            System.alloc(layout)
-        }
-
-        unsafe fn dealloc(&self, ptr: *mut u8, layout: std::alloc::Layout) {
-            FREED.fetch_add(layout.size(), Ordering::SeqCst);
-            System.dealloc(ptr, layout)
-        }
-    }
-
-    #[global_allocator]
-    static GLOBAL: MemoryTracker = MemoryTracker;
 
     #[test]
     fn test_remove_single_comments_basic() {
@@ -180,45 +157,5 @@ mod tests {
         let content = "let x = 1; /// comment\nlet y = 2;";
         let result = remove_single_comments(content, &["//", "///"]);
         assert_eq!(result, "let x = 1; \nlet y = 2;");
-    }
-
-    #[test]
-    fn test_single_line_comment_removal_performance() {
-        use std::time::Instant;
-
-        println!("== Single line comment removal performance");
-
-        // Generate large content with comments
-        let mut content = String::with_capacity(1024 * 1024);
-        for i in 0..100000 {
-            content.push_str(&format!("let x{} = {}; // comment {}\n", i, i, i));
-        }
-
-        println!(
-            "Input size: {:.2} MB",
-            content.len() as f64 / (1024.0 * 1024.0)
-        );
-
-        // Reset memory counters before measuring
-        ALLOCATED.store(0, Ordering::SeqCst);
-        FREED.store(0, Ordering::SeqCst);
-
-        let start = Instant::now();
-        let result = remove_single_comments(&content, &["//", "<--"]);
-        let duration = start.elapsed();
-
-        println!(
-            "Output size: {:.2} MB",
-            result.len() as f64 / (1024.0 * 1024.0)
-        );
-        println!("Processed in {:?}", duration);
-        println!(
-            "Memory allocated: {:.2} MB",
-            ALLOCATED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
-        );
-        println!(
-            "Memory freed: {:.2} MB",
-            FREED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
-        );
     }
 }
