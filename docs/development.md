@@ -28,6 +28,12 @@ Run both project and build tests:
 cargo test --workspace
 ```
 
+## Running benchmarks
+
+```bash
+cargo bench --bench comment_remover
+```
+
 ## VSCode extensions
 
 Here are some recommended extensions for VS Code
