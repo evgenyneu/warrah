@@ -157,30 +157,30 @@ mod tests {
 
     #[test]
     fn test_single_line_comment_removal_performance() {
-        use std::alloc::{GlobalAlloc, System};
-        use std::sync::atomic::{AtomicUsize, Ordering};
+        // use std::alloc::{GlobalAlloc, System};
+        // use std::sync::atomic::{AtomicUsize, Ordering};
         use std::time::Instant;
 
         // Track memory allocations
-        static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
-        static FREED: AtomicUsize = AtomicUsize::new(0);
+        // static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
+        // static FREED: AtomicUsize = AtomicUsize::new(0);
 
-        struct MemoryTracker;
+        // struct MemoryTracker;
 
-        unsafe impl GlobalAlloc for MemoryTracker {
-            unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
-                ALLOCATED.fetch_add(layout.size(), Ordering::SeqCst);
-                System.alloc(layout)
-            }
+        // unsafe impl GlobalAlloc for MemoryTracker {
+        //     unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
+        //         ALLOCATED.fetch_add(layout.size(), Ordering::SeqCst);
+        //         System.alloc(layout)
+        //     }
 
-            unsafe fn dealloc(&self, ptr: *mut u8, layout: std::alloc::Layout) {
-                FREED.fetch_add(layout.size(), Ordering::SeqCst);
-                System.dealloc(ptr, layout)
-            }
-        }
+        //     unsafe fn dealloc(&self, ptr: *mut u8, layout: std::alloc::Layout) {
+        //         FREED.fetch_add(layout.size(), Ordering::SeqCst);
+        //         System.dealloc(ptr, layout)
+        //     }
+        // }
 
-        #[global_allocator]
-        static GLOBAL: MemoryTracker = MemoryTracker;
+        // #[global_allocator]
+        // static GLOBAL: MemoryTracker = MemoryTracker;
 
         println!("== Single line comment removal performance");
 
@@ -204,13 +204,13 @@ mod tests {
             result.len() as f64 / (1024.0 * 1024.0)
         );
         println!("Processed in {:?}", duration);
-        println!(
-            "Memory allocated: {:.2} MB",
-            ALLOCATED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
-        );
-        println!(
-            "Memory freed: {:.2} MB",
-            FREED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
-        );
+        // println!(
+        //     "Memory allocated: {:.2} MB",
+        //     ALLOCATED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
+        // );
+        // println!(
+        //     "Memory freed: {:.2} MB",
+        //     FREED.load(Ordering::SeqCst) as f64 / (1024.0 * 1024.0)
+        // );
     }
 }

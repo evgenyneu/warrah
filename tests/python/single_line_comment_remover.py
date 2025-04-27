@@ -30,30 +30,34 @@ def remove_single_comments(content: str, markers: list[str]) -> str:
 # Performance test
 if __name__ == "__main__":
     import time
-    import tracemalloc
+    # import sys
+    # import gc
 
     print("== Single line comment removal performance")
 
     # Generate large content with comments (same as Rust test)
-    content = ''
+    content_parts = []
     for i in range(100000):
-        content += f'let x{i} = {i}; // comment {i}\n'
+        content_parts.append(f'let x{i} = {i}; // comment {i}\n')
+    content = ''.join(content_parts)
 
     print(f"Input size: {len(content) / (1024 * 1024):.2f} MB")
 
-    # Start memory tracking
-    tracemalloc.start()
+    # Force garbage collection before test
+    # gc.collect()
+
+    # Get initial memory usage
+    # initial_memory = sys.getsizeof(content)
 
     # Measure time
     start_time = time.time()
     result = remove_single_comments(content, ["//", "<--"])
     duration = (time.time() - start_time) * 1000  # Convert to milliseconds
 
-    # Get memory statistics
-    current, peak = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    # Get final memory usage
+    # final_memory = sys.getsizeof(result)
 
     print(f"Output size: {len(result) / (1024 * 1024):.2f} MB")
     print(f"Processed in {duration:.6f}ms")
-    print(f"Memory allocated (peak): {peak / (1024 * 1024):.2f} MB")
-    print(f"Current memory usage: {current / (1024 * 1024):.2f} MB")
+    # print(f"Memory allocated: {final_memory / (1024 * 1024):.2f} MB")
+    # print(f"Memory freed: {(initial_memory - final_memory) / (1024 * 1024):.2f} MB")
