@@ -6,10 +6,10 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     }
 
     let mut result = String::with_capacity(content.len());
-    let mut lines = content.lines().peekable();
+    let lines: Vec<&str> = content.lines().collect();
     let has_trailing_newline = content.ends_with('\n');
 
-    while let Some(line) = lines.next() {
+    for (i, line) in lines.iter().enumerate() {
         let mut comment_start = None;
 
         // Find earliest comment marker in the line
@@ -27,7 +27,7 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
         }
 
         // Add newline if not last line or if input ends with newline
-        if lines.peek().is_some() || has_trailing_newline {
+        if i < lines.len() - 1 || has_trailing_newline {
             result.push('\n');
         }
     }
