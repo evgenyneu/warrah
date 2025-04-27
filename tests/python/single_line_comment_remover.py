@@ -23,14 +23,9 @@ def remove_single_comments(content: str, markers: list[str]) -> str:
 
         # Add newline if not last line or if input ends with newline
         if i < len(lines) - 1 or has_trailing_newline:
-            result.append('')
+            result.append('\n')
 
-    # Join with newlines and ensure we don't have extra newlines at the end
-    result_str = '\n'.join(result)
-    if not has_trailing_newline and result_str.endswith('\n'):
-        result_str = result_str[:-1]
-
-    return result_str
+    return ''.join(result)
 
 # Performance test
 if __name__ == "__main__":
