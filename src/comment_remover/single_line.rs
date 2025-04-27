@@ -16,7 +16,7 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
         .map(|marker| memmem::Finder::new(marker))
         .collect();
 
-    for (i, line) in content.lines().enumerate() {
+    for line in content.lines() {
         let comment_start = finders
             .iter()
             .filter_map(|finder| finder.find(line.as_bytes()))
