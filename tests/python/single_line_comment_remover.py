@@ -1,3 +1,5 @@
+# Python implementation of the single line comment remover
+# to compare performance with Rust implementation
 def remove_single_comments(content: str, markers: list[str]) -> str:
     if not markers:
         return content
