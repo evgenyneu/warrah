@@ -8,32 +8,32 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     }
 
     let mut result = String::with_capacity(content.len());
-    let lines: Vec<&str> = content.lines().collect();
     let has_trailing_newline = content.ends_with('\n');
 
-    // Pre-compute the finders once
     let finders: Vec<_> = markers
         .iter()
         .map(|marker| memmem::Finder::new(marker))
         .collect();
 
-    for (i, line) in lines.iter().enumerate() {
+    for (i, line) in content.lines().enumerate() {
         let comment_start = finders
             .iter()
             .filter_map(|finder| finder.find(line.as_bytes()))
             .min();
 
-        // Add line up to comment or whole line if no comment
         if let Some(pos) = comment_start {
             result.push_str(&line[..pos]);
         } else {
             result.push_str(line);
         }
 
-        // Add newline if not last line or if input ends with newline
-        if i < lines.len() - 1 || has_trailing_newline {
+        if !line.is_empty() || has_trailing_newline {
             result.push('\n');
         }
+    }
+
+    if !has_trailing_newline && !result.is_empty() {
+        result.pop();
     }
 
     result
