@@ -30,8 +30,7 @@ def remove_single_comments(content: str, markers: list[str]) -> str:
 # Performance test
 if __name__ == "__main__":
     import time
-    # import sys
-    # import gc
+    # import tracemalloc
 
     print("== Single line comment removal performance")
 
@@ -43,21 +42,28 @@ if __name__ == "__main__":
 
     print(f"Input size: {len(content) / (1024 * 1024):.2f} MB")
 
-    # Force garbage collection before test
-    # gc.collect()
+    # # Start memory tracking
+    # tracemalloc.start()
 
-    # Get initial memory usage
-    # initial_memory = sys.getsizeof(content)
+    # # Take snapshot before the function call
+    # snapshot1 = tracemalloc.take_snapshot()
 
     # Measure time
     start_time = time.time()
     result = remove_single_comments(content, ["//", "<--"])
     duration = (time.time() - start_time) * 1000  # Convert to milliseconds
 
-    # Get final memory usage
-    # final_memory = sys.getsizeof(result)
+    # # Take snapshot after the function call
+    # snapshot2 = tracemalloc.take_snapshot()
+
+    # Calculate memory difference
+    # stats = snapshot2.compare_to(snapshot1, 'lineno')
+    # total_allocated = sum(stat.size for stat in stats if stat.size > 0)
+    # total_freed = sum(abs(stat.size) for stat in stats if stat.size < 0)
 
     print(f"Output size: {len(result) / (1024 * 1024):.2f} MB")
     print(f"Processed in {duration:.6f}ms")
-    # print(f"Memory allocated: {final_memory / (1024 * 1024):.2f} MB")
-    # print(f"Memory freed: {(initial_memory - final_memory) / (1024 * 1024):.2f} MB")
+    # print(f"Memory allocated: {total_allocated / (1024 * 1024):.2f} MB")
+    # print(f"Memory freed: {total_freed / (1024 * 1024):.2f} MB")
+
+    # tracemalloc.stop()

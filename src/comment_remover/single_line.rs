@@ -38,6 +38,29 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::alloc::{GlobalAlloc, System};
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    // Track memory allocations
+    static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
+    static FREED: AtomicUsize = AtomicUsize::new(0);
+
+    struct MemoryTracker;
+
+    unsafe impl GlobalAlloc for MemoryTracker {
+        unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
+            ALLOCATED.fetch_add(layout.size(), Ordering::SeqCst);
+            System.alloc(layout)
+        }
+
+        unsafe fn dealloc(&self, ptr: *mut u8, layout: std::alloc::Layout) {
+            FREED.fetch_add(layout.size(), Ordering::SeqCst);
+            System.dealloc(ptr, layout)
+        }
+    }
+
+    #[global_allocator]
+    static GLOBAL: MemoryTracker = MemoryTracker;
 
     #[test]
     fn test_remove_single_comments_basic() {
@@ -157,30 +180,7 @@ mod tests {
 
     #[test]
     fn test_single_line_comment_removal_performance() {
-        use std::alloc::{GlobalAlloc, System};
-        use std::sync::atomic::{AtomicUsize, Ordering};
         use std::time::Instant;
-
-        // Track memory allocations
-        static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
-        static FREED: AtomicUsize = AtomicUsize::new(0);
-
-        struct MemoryTracker;
-
-        unsafe impl GlobalAlloc for MemoryTracker {
-            unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
-                ALLOCATED.fetch_add(layout.size(), Ordering::SeqCst);
-                System.alloc(layout)
-            }
-
-            unsafe fn dealloc(&self, ptr: *mut u8, layout: std::alloc::Layout) {
-                FREED.fetch_add(layout.size(), Ordering::SeqCst);
-                System.dealloc(ptr, layout)
-            }
-        }
-
-        #[global_allocator]
-        static GLOBAL: MemoryTracker = MemoryTracker;
 
         println!("== Single line comment removal performance");
 
@@ -194,6 +194,10 @@ mod tests {
             "Input size: {:.2} MB",
             content.len() as f64 / (1024.0 * 1024.0)
         );
+
+        // Reset memory counters before measuring
+        ALLOCATED.store(0, Ordering::SeqCst);
+        FREED.store(0, Ordering::SeqCst);
 
         let start = Instant::now();
         let result = remove_single_comments(&content, &["//", "<--"]);
