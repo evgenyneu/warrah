@@ -10,6 +10,7 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     let mut result = String::with_capacity(content.len());
     let has_trailing_newline = content.ends_with('\n');
 
+    // Pre-compute the finders once
     let finders: Vec<_> = markers
         .iter()
         .map(|marker| memmem::Finder::new(marker))
@@ -27,12 +28,11 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
             result.push_str(line);
         }
 
-        if !line.is_empty() || has_trailing_newline {
-            result.push('\n');
-        }
+        result.push('\n');
     }
 
-    if !has_trailing_newline && !result.is_empty() {
+    // Remove the last newline if it's not present in the original content
+    if !has_trailing_newline {
         result.pop();
     }
 
