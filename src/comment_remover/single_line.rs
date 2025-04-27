@@ -1,3 +1,5 @@
+use memchr::memmem;
+
 /// Removes single line comments from the content.
 /// Returns the content with single line comments removed.
 pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
@@ -9,15 +11,17 @@ pub fn remove_single_comments(content: &str, markers: &[&str]) -> String {
     let lines: Vec<&str> = content.lines().collect();
     let has_trailing_newline = content.ends_with('\n');
 
-    for (i, line) in lines.iter().enumerate() {
-        let mut comment_start = None;
+    // Pre-compute the finders once
+    let finders: Vec<_> = markers
+        .iter()
+        .map(|marker| memmem::Finder::new(marker))
+        .collect();
 
-        // Find earliest comment marker in the line
-        for marker in markers {
-            if let Some(pos) = line.find(marker) {
-                comment_start = comment_start.map_or(Some(pos), |p: usize| Some(p.min(pos)));
-            }
-        }
+    for (i, line) in lines.iter().enumerate() {
+        let comment_start = finders
+            .iter()
+            .filter_map(|finder| finder.find(line.as_bytes()))
+            .min();
 
         // Add line up to comment or whole line if no comment
         if let Some(pos) = comment_start {

@@ -18,6 +18,7 @@ members = [
 ]
 
 [dependencies]
+memchr = "2.7.4"
 
 [build-dependencies]
 build-script = { path = "build" }
