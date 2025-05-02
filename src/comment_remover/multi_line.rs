@@ -29,10 +29,12 @@ pub fn remove_comments(
         if let Some(idx) = active_multi {
             // Inside multi-line comment: search for end marker
             let (_, end_finder) = &multi_finders[idx];
+
             if let Some(end_pos) = end_finder.find(line.as_bytes()) {
                 // End marker found, copy the rest of the line
                 result.push_str(&line[end_pos + end_finder.needle().len()..]);
                 active_multi = None;
+                result.push('\n');
             }
             // If end marker not found, skip the entire line
         } else {
@@ -64,6 +66,7 @@ pub fn remove_comments(
                 Some(("single", _)) => {
                     // Copy up to marker
                     result.push_str(&line[..next_pos]);
+                    result.push('\n');
                 }
                 Some(("multi", idx)) => {
                     // Copy up to marker, enter multi-line state
@@ -75,6 +78,7 @@ pub fn remove_comments(
                         // End marker found on same line, copy the rest after the comment
                         let comment_end = next_pos + end_pos + end_finder.needle().len();
                         result.push_str(&line[comment_end..]);
+                        result.push('\n');
                     } else {
                         // End marker not found, enter multi-line state
                         active_multi = Some(idx);
@@ -83,12 +87,11 @@ pub fn remove_comments(
                 None => {
                     // No markers, copy the entire line
                     result.push_str(line);
+                    result.push('\n');
                 }
                 _ => unreachable!(),
             }
         }
-
-        result.push('\n');
     }
 
     // Remove the last newline if it's not present in the original content
