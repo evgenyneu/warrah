@@ -107,6 +107,7 @@ mod tests {
     fn test_remove_comments_basic() {
         let content = r#"let x = 1; // single line comment
     /* multi-line
+       nice
        comment */
     let y = 2; // another single line
     let z = 3; /* inline multi-line */ let w = 4;
