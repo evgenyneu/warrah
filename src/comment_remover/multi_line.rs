@@ -38,7 +38,7 @@ pub fn remove_comments(
         } else {
             // Outside comment: search for next marker
             let mut next_pos = line.len();
-            let mut next_type = None;
+            let mut next_type: Option<(&str, usize)> = None;
 
             // Check single-line markers
             for (i, finder) in single_finders.iter().enumerate() {
@@ -68,12 +68,23 @@ pub fn remove_comments(
                 Some(("multi", idx)) => {
                     // Copy up to marker, enter multi-line state
                     result.push_str(&line[..next_pos]);
-                    active_multi = Some(idx);
+                    let (_, end_finder) = &multi_finders[idx];
+
+                    // Check if end marker is on the same line
+                    if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
+                        // End marker found on same line, copy the rest after the comment
+                        let comment_end = next_pos + end_pos + end_finder.needle().len();
+                        result.push_str(&line[comment_end..]);
+                    } else {
+                        // End marker not found, enter multi-line state
+                        active_multi = Some(idx);
+                    }
                 }
                 None => {
                     // No markers, copy the entire line
                     result.push_str(line);
                 }
+                _ => unreachable!(),
             }
         }
 
@@ -86,4 +97,26 @@ pub fn remove_comments(
     }
 
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_remove_comments_basic() {
+        let content = r#"let x = 1; // single line comment
+    /* multi-line
+       comment */
+    let y = 2; // another single line
+    let z = 3; /* inline multi-line */ let w = 4;
+"#;
+
+        let result = remove_comments(content, &["//"], &[("/*", "*/")]);
+
+        assert_eq!(
+            result,
+            "let x = 1; \n    \n    let y = 2; \n    let z = 3;  let w = 4;\n"
+        );
+    }
 }
