@@ -34,11 +34,11 @@ pub fn remove_all_comments(content: &str, markers: &[(&str, Option<&str>)]) -> S
                 result.push('\n');
             }
         } else {
-            // Outside comment: search for next marker
+            // Outside comment: search for start marker
             let mut next_pos = line.len();
             let mut next_idx: Option<usize> = None;
 
-            // Check all markers
+            // Check for start markers (single line or multi line)
             for (i, (start_finder, _)) in finders.iter().enumerate() {
                 if let Some(pos) = start_finder.find(line.as_bytes()) {
                     if pos < next_pos {
