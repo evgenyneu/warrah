@@ -34,13 +34,13 @@ cargo test --workspace
 cargo bench
 ```
 
-The results of previous runs are in the `benches/results` directory, where the first line is the CPU and OS:
+The results of previous runs are in the [benches/results](../benches/results) directory, where the first line is the CPU and OS:
 
 ```sh
 echo "CPU: $(lscpu | grep "Model name" | cut -d: -f2 | xargs) | OS: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2)"
 ```
 
-See benchmark_resolu
+See [benches/README.md](../benches/README.md) for more details.
 
 ## VSCode extensions
 
