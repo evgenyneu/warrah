@@ -1,8 +1,6 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use std::path::PathBuf;
-use warrah::languages::language_maps::{
-    get_comments_by_language, get_language_by_extension, get_language_by_filename,
-};
+use warrah::languages::language_maps::{get_markers_by_extension, get_markers_by_filename};
 
 fn generate_test_paths() -> Vec<PathBuf> {
     // Create a diverse set of test paths covering different languages
@@ -40,20 +38,26 @@ fn generate_test_paths() -> Vec<PathBuf> {
     ]
 }
 
-fn detect_language(path: &PathBuf) -> Option<&'static str> {
+fn get_markers(path: &PathBuf) -> Option<&'static [(&str, Option<&str>)]> {
     // First try to get language by filename
-    if let Some(lang) = get_language_by_filename(path.file_name()?.to_str()?) {
-        return Some(lang);
+    if let Some(markers) = get_markers_by_filename(path.file_name()?.to_str()?) {
+        return Some(markers);
     }
 
     // Then try to get language by extension
     if let Some(ext) = path.extension() {
-        if let Some(lang) = get_language_by_extension(&format!(".{}", ext.to_str()?)) {
-            return Some(lang);
+        if let Some(markers) = get_markers_by_extension(&format!(".{}", ext.to_str()?)) {
+            return Some(markers);
         }
     }
 
     None
+}
+
+fn get_markers_for_paths(paths: &[PathBuf]) {
+    for path in paths {
+        get_markers(&path);
+    }
 }
 
 fn benchmark_language_detection(c: &mut Criterion) {
@@ -62,11 +66,7 @@ fn benchmark_language_detection(c: &mut Criterion) {
 
     c.bench_function("detect_language", |b| {
         b.iter(|| {
-            for path in &paths {
-                if let Some(language) = detect_language(black_box(path)) {
-                    let _comments = get_comments_by_language(black_box(language));
-                }
-            }
+            get_markers_for_paths(black_box(&paths));
         })
     });
 }

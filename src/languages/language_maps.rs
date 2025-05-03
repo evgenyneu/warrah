@@ -26,10 +26,12 @@ mod tests {
     fn test_get_markers_by_extension() {
         // Test known extensions
         let rust_markers = get_markers_by_extension(".rs").unwrap();
+        assert_eq!(rust_markers.len(), 2);
         assert!(rust_markers.contains(&("//", None)));
         assert!(rust_markers.contains(&("/*", Some("*/"))));
 
         let python_markers = get_markers_by_extension(".py").unwrap();
+        assert_eq!(python_markers.len(), 3);
         assert!(python_markers.contains(&("#", None)));
         assert!(python_markers.contains(&("\"\"\"", Some("\"\"\""))));
         assert!(python_markers.contains(&("'''", Some("'''"))));
@@ -45,9 +47,11 @@ mod tests {
     fn test_get_markers_by_filename() {
         // Test known filenames
         let dockerfile_markers = get_markers_by_filename("dockerfile").unwrap();
+        assert_eq!(dockerfile_markers.len(), 1);
         assert!(dockerfile_markers.contains(&("#", None)));
 
         let makefile_markers = get_markers_by_filename("makefile").unwrap();
+        assert_eq!(makefile_markers.len(), 1);
         assert!(makefile_markers.contains(&("#", None)));
 
         // Test case sensitivity
