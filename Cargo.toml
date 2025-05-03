@@ -46,3 +46,7 @@ harness = false
 [[bench]]
 name = "comment_remover_single_line"
 harness = false
+
+[[bench]]
+name = "detect_language"
+harness = false
