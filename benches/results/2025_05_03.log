@@ -1,0 +1,30 @@
+CPU: 12th Gen Intel(R) Core(TM) i5-12600K | OS: Ubuntu 24.04.2 LTS
+
+     Running benches/comment_remover.rs (target/release/deps/comment_remover-60c96c5c4dad6169)
+Gnuplot not found, using plotters backend
+== Test content size: 20.75 KB
+remove_comments         time:   [18.980 µs 19.059 µs 19.148 µs]
+                        change: [+0.0904% +0.7540% +1.4813%] (p = 0.03 < 0.05)
+                        Change within noise threshold.
+Found 6 outliers among 100 measurements (6.00%)
+  5 (5.00%) high mild
+  1 (1.00%) high severe
+
+     Running benches/comment_remover_large_file.rs (target/release/deps/comment_remover_large_file-6776a4660b061ad7)
+Gnuplot not found, using plotters backend
+== Test content size: 16.21 MB
+remove_comments_large_file
+                        time:   [14.924 ms 14.970 ms 15.020 ms]
+Found 9 outliers among 100 measurements (9.00%)
+  4 (4.00%) high mild
+  5 (5.00%) high severe
+
+     Running benches/comment_remover_single_line.rs (target/release/deps/comment_remover_single_line-2cce510afc505b7d)
+Gnuplot not found, using plotters backend
+== Test content size: 20.84 KB
+remove_single_line_comments
+                        time:   [13.984 µs 14.091 µs 14.199 µs]
+                        change: [-3.2904% -2.2935% -1.2541%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 100 measurements (3.00%)
+  3 (3.00%) high mild

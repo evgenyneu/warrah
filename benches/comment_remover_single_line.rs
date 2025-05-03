@@ -2,7 +2,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use warrah::comment_remover::remove_all_comments::remove_all_comments;
 
 fn generate_test_content() -> String {
-    let mut content = String::with_capacity(1024 * 1024);
+    let mut content = String::with_capacity(1024);
     for i in 0..699 {
         content.push_str(&format!("let x{} = {}; // comment {}\n", i, i, i));
     }

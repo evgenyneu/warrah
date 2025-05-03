@@ -10,20 +10,20 @@ fn generate_test_content() -> String {
     let z = 3; /* inline multi-line */ let w = 4;
 "#;
 
-    let mut content = String::with_capacity(1024 * 1024);
-    for _ in 0..125 {
+    let mut content = String::with_capacity(1024 * 500);
+    for _ in 0..100000 {
         content.push_str(template);
     }
     content
 }
 
-fn benchmark_comment_removal(c: &mut Criterion) {
+fn benchmark_comment_removal_large_file(c: &mut Criterion) {
     let content = generate_test_content();
     let size_bytes = content.len();
-    let size_kb = size_bytes as f64 / 1024.0;
-    println!("== Test content size: {:.2} KB", size_kb);
+    let size_mb = size_bytes as f64 / (1024.0 * 1024.0);
+    println!("== Test content size: {:.2} MB", size_mb);
 
-    c.bench_function("remove_comments", |b| {
+    c.bench_function("remove_comments_large_file", |b| {
         b.iter(|| {
             remove_all_comments(
                 black_box(&content),
@@ -34,5 +34,5 @@ fn benchmark_comment_removal(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, benchmark_comment_removal);
+criterion_group!(benches, benchmark_comment_removal_large_file);
 criterion_main!(benches);

@@ -30,17 +30,17 @@ cargo test --workspace
 
 ## Running benchmarks
 
-Remove both multiline and single line comments:
-
 ```bash
-cargo bench --bench comment_remover
+cargo bench
 ```
 
-Remove only single line comments:
+The results of previous runs are in the `benches/results` directory, where the first line is the CPU and OS:
 
-```bash
-cargo bench --bench comment_remover_single_line
+```sh
+echo "CPU: $(lscpu | grep "Model name" | cut -d: -f2 | xargs) | OS: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2)"
 ```
+
+See benchmark_resolu
 
 ## VSCode extensions
 

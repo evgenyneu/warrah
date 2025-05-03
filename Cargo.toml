@@ -38,6 +38,10 @@ path = "src/main.rs"
 name = "comment_remover"
 harness = false
 
+[[bench]]
+name = "comment_remover_large_file"
+harness = false
+
 
 [[bench]]
 name = "comment_remover_single_line"
