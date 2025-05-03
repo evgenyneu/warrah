@@ -36,15 +36,17 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
                 ));
             }
 
-            // Convert single and multi-line comments to the new format
             let mut markers = Vec::new();
 
             for comment in &lang.single_line_comments {
-                markers.push((comment.as_str(), None));
+                let escaped_comment = comment.replace("\"", "\\\"").to_string();
+                markers.push((escaped_comment, None));
             }
 
             for (start, end) in &lang.multi_line_comments {
-                markers.push((start.as_str(), Some(end.as_str())));
+                let escaped_start = start.replace("\"", "\\\"").to_string();
+                let escaped_end = end.replace("\"", "\\\"").to_string();
+                markers.push((escaped_start, Some(escaped_end)));
             }
 
             tuples.push((ext.as_str(), markers));
@@ -54,7 +56,6 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
     // Sort tuples by the extension (first item)
     tuples.sort_by_key(|&(ext, _)| ext);
 
-    // Generate the code string with sorted tuples
     let mut code =
         String::from("pub static EXTENSION_TO_MARKERS: &[(&str, &[(&str, Option<&str>)])] = &[\n");
 
@@ -65,11 +66,9 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
                 Some(end) => {
                     code.push_str(&format!("        (\"{}\", Some(\"{}\")),\n", start, end))
                 }
-
                 None => code.push_str(&format!("        (\"{}\", None),\n", start)),
             }
         }
-
         code.push_str("    ]),\n");
     }
 
@@ -81,7 +80,6 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
     let mut seen_filenames = HashSet::new();
     let mut tuples = Vec::new();
 
-    // First collect all tuples while checking for duplicates
     for lang in languages {
         for filename in &lang.file_names {
             if !seen_filenames.insert(filename) {
@@ -91,15 +89,17 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
                 ));
             }
 
-            // Convert single and multi-line comments to the new format
             let mut markers = Vec::new();
 
             for comment in &lang.single_line_comments {
-                markers.push((comment.as_str(), None));
+                let escaped_comment = comment.replace("\"", "\\\"").to_string();
+                markers.push((escaped_comment, None));
             }
 
             for (start, end) in &lang.multi_line_comments {
-                markers.push((start.as_str(), Some(end.as_str())));
+                let escaped_start = start.replace("\"", "\\\"").to_string();
+                let escaped_end = end.replace("\"", "\\\"").to_string();
+                markers.push((escaped_start, Some(escaped_end)));
             }
 
             tuples.push((filename.as_str(), markers));
@@ -109,7 +109,6 @@ pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
     // Sort tuples by the filename (first item)
     tuples.sort_by_key(|&(filename, _)| filename);
 
-    // Generate the code string with sorted tuples
     let mut code =
         String::from("pub static FILENAME_TO_MARKERS: &[(&str, &[(&str, Option<&str>)])] = &[\n");
 
@@ -203,30 +202,44 @@ mod tests {
     fn test_generate_filename_map() {
         let languages = vec![
             Language {
-                name: "dockerfile".to_string(),
+                name: "rust".to_string(),
                 extensions: vec![],
-                file_names: vec!["dockerfile".to_string()],
-                single_line_comments: vec!["#".to_string()],
-                multi_line_comments: vec![],
+                file_names: vec!["main.rs".to_string()],
+                single_line_comments: vec!["//".to_string()],
+                multi_line_comments: vec![("/*".to_string(), "*/".to_string())],
             },
             Language {
-                name: "makefile".to_string(),
+                name: "python".to_string(),
                 extensions: vec![],
-                file_names: vec!["makefile".to_string()],
-                single_line_comments: vec!["#".to_string()],
-                multi_line_comments: vec![],
+                file_names: vec!["main.py".to_string()],
+                single_line_comments: vec!["//".to_string()],
+                multi_line_comments: vec![
+                    ("\"\"\"".to_string(), "\"\"\"".to_string()),
+                    ("'''".to_string(), "'''".to_string()),
+                ],
             },
         ];
 
         let result = generate_filename_map(&languages).unwrap();
-        assert!(result.contains("FILENAME_TO_MARKERS"));
-        assert!(result.contains("(\"dockerfile\", &["));
-        assert!(result.contains("(\"makefile\", &["));
-        assert!(result.contains("(\"#\", None)"));
+
+        let expected = r#"pub static FILENAME_TO_MARKERS: &[(&str, &[(&str, Option<&str>)])] = &[
+    ("main.py", &[
+        ("//", None),
+        ("\"\"\"", Some("\"\"\"")),
+        ("'''", Some("'''")),
+    ]),
+    ("main.rs", &[
+        ("//", None),
+        ("/*", Some("*/")),
+    ]),
+];
+"#;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_duplicate_extension() {
+    fn test_return_error_on_duplicate_extension() {
         let languages = vec![
             Language {
                 name: "rust".to_string(),
@@ -245,12 +258,13 @@ mod tests {
         ];
 
         let result = generate_extension_map(&languages);
+
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().kind(), io::ErrorKind::InvalidData);
     }
 
     #[test]
-    fn test_duplicate_filename() {
+    fn test_return_error_on_duplicate_filename() {
         let languages = vec![
             Language {
                 name: "dockerfile".to_string(),
@@ -269,6 +283,7 @@ mod tests {
         ];
 
         let result = generate_filename_map(&languages);
+
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().kind(), io::ErrorKind::InvalidData);
     }

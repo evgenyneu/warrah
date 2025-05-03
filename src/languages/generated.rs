@@ -242,7 +242,7 @@ pub static EXTENSION_TO_MARKERS: &[(&str, &[(&str, Option<&str>)])] = &[
     ]),
     (".py", &[
         ("#", None),
-        (""""", Some(""""")),
+        ("\"\"\"", Some("\"\"\"")),
         ("'''", Some("'''")),
     ]),
     (".qml", &[
