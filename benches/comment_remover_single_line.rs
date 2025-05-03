@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use warrah::comment_remover::multi_line::remove_all_comments;
+use warrah::comment_remover::remove_all_comments::remove_all_comments;
 
 fn generate_test_content() -> String {
     let mut content = String::with_capacity(1024 * 1024);

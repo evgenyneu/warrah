@@ -1,3 +1,2 @@
 pub mod comment_remover;
-pub mod multi_line;
-pub mod single_line;
+pub mod remove_all_comments;
