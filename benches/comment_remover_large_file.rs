@@ -27,8 +27,7 @@ fn benchmark_comment_removal_large_file(c: &mut Criterion) {
         b.iter(|| {
             remove_all_comments(
                 black_box(&content),
-                black_box(&["//", "some_marker"]),
-                black_box(&[("/*", "*/")]),
+                black_box(&[("//", None), ("some_marker", None), ("/*", Some("*/"))]),
             )
         })
     });
