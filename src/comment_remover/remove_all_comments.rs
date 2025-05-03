@@ -57,7 +57,7 @@ pub fn remove_all_comments(content: &str, markers: &[(&str, Option<&str>)]) -> S
                         result.push('\n');
                     }
                     Some(end_finder) => {
-                        // Multi-line comment
+                        // Multi-line comment, look for the end marker on same line
                         if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
                             let comment_end = next_pos + end_pos + end_finder.needle().len();
                             result.push_str(&line[comment_end..]);
@@ -219,5 +219,86 @@ mod tests {
             result,
             "let x = 1; \n    \n    let y = 2; \n    let z = 3;  let w = 4;\n"
         );
+    }
+
+    #[test]
+    fn test_multi_line_no_single_line_comment() {
+        let content = r#"let x = 1;
+    /* multi-line
+    comment */
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1;\n    \n    let y = 2;");
+    }
+
+    #[test]
+    fn test_multi_line_no_end_marker() {
+        let content = r#"let x = 1;
+    /* multi-line
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1;\n   ");
+    }
+
+    #[test]
+    fn test_multi_line_start_marker_at_start() {
+        let content = r#"/* multi-line
+    comment */
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "\n    let y = 2;");
+    }
+
+    #[test]
+    fn test_multi_line_end_marker_at_end() {
+        let content = r#"let x = 1;
+    /* multi-line
+    comment */"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1;\n    ");
+    }
+
+    #[test]
+    fn test_multi_line_single_line_comment_inside_multi_line_comment() {
+        let content = r#"let x = 1; /*
+    // single line comment
+    */
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1; \n    let y = 2;");
+    }
+
+    #[test]
+    fn test_multi_line_nested_multi_line_comment() {
+        let content = r#"let x = 1; /*
+    /* multi-line
+       nice
+       comment */
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1; \n    let y = 2;");
+    }
+
+    #[test]
+    fn test_multi_line_multi_line_comment_inside_single_line_comment() {
+        let content = r#"let x = 1;
+    // /* multi-line comment
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))]);
+
+        assert_eq!(result, "let x = 1;\n    \n    let y = 2;");
     }
 }
