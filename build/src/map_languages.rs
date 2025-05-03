@@ -195,7 +195,8 @@ mod tests {
 ];
 "#;
 
-        assert_eq!(generate_extension_map(&languages).unwrap(), expected);
+        let result = generate_extension_map(&languages).unwrap();
+        assert_eq!(result, expected);
     }
 
     #[test]
