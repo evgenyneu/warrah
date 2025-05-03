@@ -3,7 +3,7 @@ use warrah::comment_remover::multi_line::remove_all_comments;
 
 fn generate_test_content() -> String {
     let mut content = String::with_capacity(1024 * 1024);
-    for i in 0..100000 {
+    for i in 0..699 {
         content.push_str(&format!("let x{} = {}; // comment {}\n", i, i, i));
     }
     content
@@ -11,6 +11,9 @@ fn generate_test_content() -> String {
 
 fn benchmark_comment_removal_single_line(c: &mut Criterion) {
     let content = generate_test_content();
+    let size_bytes = content.len();
+    let size_kb = size_bytes as f64 / 1024.0;
+    println!("== Test content size: {:.2} KB", size_kb);
 
     c.bench_function("remove_single_line_comments", |b| {
         b.iter(|| {

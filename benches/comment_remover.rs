@@ -11,7 +11,7 @@ fn generate_test_content() -> String {
 "#;
 
     let mut content = String::with_capacity(1024 * 1024);
-    for _ in 0..100000 {
+    for _ in 0..125 {
         content.push_str(template);
     }
     content
@@ -20,8 +20,8 @@ fn generate_test_content() -> String {
 fn benchmark_comment_removal(c: &mut Criterion) {
     let content = generate_test_content();
     let size_bytes = content.len();
-    let size_mb = size_bytes as f64 / (1024.0 * 1024.0);
-    println!("== Test content size: {:.2} MB", size_mb);
+    let size_kb = size_bytes as f64 / 1024.0;
+    println!("== Test content size: {:.2} KB", size_kb);
 
     c.bench_function("remove_all_comments", |b| {
         b.iter(|| {
