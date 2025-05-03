@@ -11,7 +11,7 @@ fn generate_test_content() -> String {
 "#;
 
     let mut content = String::with_capacity(1024 * 1024);
-    for _ in 0..10000 {
+    for _ in 0..100000 {
         content.push_str(template);
     }
     content
@@ -27,8 +27,8 @@ fn benchmark_comment_removal(c: &mut Criterion) {
         b.iter(|| {
             remove_all_comments(
                 black_box(&content),
-                black_box(&["//", "<--"]),
-                black_box(&[]),
+                black_box(&["//", "some_marker"]),
+                black_box(&[("/*", "*/")]),
             )
         })
     });
