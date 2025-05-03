@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use warrah::comment_remover::single_line::remove_single_comments;
+use warrah::comment_remover::multi_line::remove_all_comments;
 
 fn generate_test_content() -> String {
     let mut content = String::with_capacity(1024 * 1024);
@@ -13,7 +13,13 @@ fn benchmark_comment_removal_single_line(c: &mut Criterion) {
     let content = generate_test_content();
 
     c.bench_function("remove_single_line_comments", |b| {
-        b.iter(|| remove_single_comments(black_box(&content), black_box(&["//", "<--"])))
+        b.iter(|| {
+            remove_all_comments(
+                black_box(&content),
+                black_box(&["//", "<--"]),
+                black_box(&[]),
+            )
+        })
     });
 }
 

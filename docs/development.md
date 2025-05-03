@@ -30,8 +30,16 @@ cargo test --workspace
 
 ## Running benchmarks
 
+Remove both multiline and single line comments:
+
 ```bash
 cargo bench --bench comment_remover
+```
+
+Remove only single line comments:
+
+```bash
+cargo bench --bench comment_remover_single_line
 ```
 
 ## VSCode extensions
