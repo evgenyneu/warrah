@@ -37,3 +37,8 @@ path = "src/main.rs"
 [[bench]]
 name = "comment_remover"
 harness = false
+
+
+[[bench]]
+name = "multi_line_comment_remover"
+harness = false
