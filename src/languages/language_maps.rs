@@ -25,22 +25,22 @@ mod tests {
     #[test]
     fn test_get_markers_by_extension() {
         // Test known extensions
-        let rust_markers = get_markers_by_extension(".rs").unwrap();
+        let rust_markers = get_markers_by_extension("rs").unwrap();
         assert_eq!(rust_markers.len(), 2);
         assert!(rust_markers.contains(&("//", None)));
         assert!(rust_markers.contains(&("/*", Some("*/"))));
 
-        let python_markers = get_markers_by_extension(".py").unwrap();
+        let python_markers = get_markers_by_extension("py").unwrap();
         assert_eq!(python_markers.len(), 3);
         assert!(python_markers.contains(&("#", None)));
         assert!(python_markers.contains(&("\"\"\"", Some("\"\"\""))));
         assert!(python_markers.contains(&("'''", Some("'''"))));
 
         // Test case sensitivity
-        assert_eq!(get_markers_by_extension(".RS"), None);
+        assert_eq!(get_markers_by_extension("RS"), None);
 
         // Test unknown extension
-        assert_eq!(get_markers_by_extension(".xyz"), None);
+        assert_eq!(get_markers_by_extension("xyz"), None);
     }
 
     #[test]

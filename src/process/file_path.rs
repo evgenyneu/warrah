@@ -54,11 +54,10 @@ fn detect_markers(path: &Path) -> Option<&'static [(&'static str, Option<&'stati
     get_markers_by_filename(&file_name.to_lowercase())
 }
 
-/// Gets the file extension with a leading dot.
 fn get_file_extension(path: &Path) -> Option<String> {
     path.extension()
         .and_then(|ext| ext.to_str())
-        .map(|ext| format!(".{}", ext))
+        .map(|s| s.to_string())
 }
 
 /// Reads the content of a file.

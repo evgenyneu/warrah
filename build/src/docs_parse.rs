@@ -56,7 +56,13 @@ fn parse_extensions(line: &str, lang: &mut Language) {
         .trim_start_matches("s") // Handle both "Extension" and "Extensions"
         .trim_start_matches(": ")
         .split(", ")
-        .map(|s| s.trim().trim_matches('`').to_string().to_lowercase())
+        .map(|s| {
+            s.trim()
+                .trim_matches('`')
+                .trim_start_matches('.')
+                .to_string()
+                .to_lowercase()
+        })
         .collect();
 
     lang.extensions = extensions;
@@ -112,7 +118,7 @@ mod tests {
 
         let rust = languages.iter().find(|l| l.name == "rust").unwrap();
 
-        assert_eq!(rust.extensions, vec![".rs"]);
+        assert_eq!(rust.extensions, vec!["rs"]);
         assert_eq!(rust.single_line_comments, vec!["//".to_string()]);
 
         assert_eq!(
@@ -124,7 +130,7 @@ mod tests {
         // -----------
 
         let python = languages.iter().find(|l| l.name == "python").unwrap();
-        assert_eq!(python.extensions, vec![".py"]);
+        assert_eq!(python.extensions, vec!["py"]);
         assert_eq!(python.single_line_comments, vec!["#".to_string()]);
 
         assert_eq!(
@@ -166,7 +172,7 @@ Here are the languages we support
         // Test Rust
         let rust = &languages[0];
         assert_eq!(rust.name, "rust");
-        assert_eq!(rust.extensions, vec![".rs"]);
+        assert_eq!(rust.extensions, vec!["rs"]);
         assert_eq!(rust.single_line_comments, vec!["//".to_string()]);
         assert_eq!(
             rust.multi_line_comments,
@@ -176,7 +182,7 @@ Here are the languages we support
         // Test Python
         let python = &languages[1];
         assert_eq!(python.name, "python");
-        assert_eq!(python.extensions, vec![".py"]);
+        assert_eq!(python.extensions, vec!["py"]);
         assert_eq!(python.single_line_comments, vec!["#".to_string()]);
         assert_eq!(
             python.multi_line_comments,
@@ -213,15 +219,15 @@ Here are the languages we support
 
         // Test single extension
         parse_extensions("- Extension: `.rs`", &mut lang);
-        assert_eq!(lang.extensions, vec![".rs"]);
+        assert_eq!(lang.extensions, vec!["rs"]);
 
         // Convert extensions to lowercase
         parse_extensions("- Extension: `.RS`", &mut lang);
-        assert_eq!(lang.extensions, vec![".rs"]);
+        assert_eq!(lang.extensions, vec!["rs"]);
 
         // Test multiple extensions
         parse_extensions("- Extensions: `.c`, `.cpp`, `.h`", &mut lang);
-        assert_eq!(lang.extensions, vec![".c", ".cpp", ".h"]);
+        assert_eq!(lang.extensions, vec!["c", "cpp", "h"]);
     }
 
     #[test]
