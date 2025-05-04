@@ -38,7 +38,7 @@ fn generate_test_paths() -> Vec<PathBuf> {
     ]
 }
 
-fn get_markers(path: &PathBuf) -> Option<&'static [(&str, Option<&str>)]> {
+fn get_markers<'a>(path: &'a PathBuf) -> Option<&'a [(&'a str, Option<&'a str>)]> {
     // First try to get language by filename
     if let Some(markers) = get_markers_by_filename(path.file_name()?.to_str()?) {
         return Some(markers);
@@ -54,19 +54,15 @@ fn get_markers(path: &PathBuf) -> Option<&'static [(&str, Option<&str>)]> {
     None
 }
 
-fn get_markers_for_paths(paths: &[PathBuf]) {
-    for path in paths {
-        get_markers(&path);
-    }
-}
-
 fn benchmark_language_detection(c: &mut Criterion) {
     let paths = generate_test_paths();
     println!("== Testing with {} different language paths", paths.len());
 
     c.bench_function("detect_language", |b| {
         b.iter(|| {
-            get_markers_for_paths(black_box(&paths));
+            for path in &paths {
+                get_markers(black_box(path));
+            }
         })
     });
 }
