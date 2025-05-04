@@ -1,39 +1,32 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::languages::language_maps::{
-    get_comments_by_language, get_language_by_extension, get_language_by_filename,
-};
-
-use crate::comment_remover::comment_remover::remove_comments;
+use crate::comment_remover::remove_all_comments::remove_all_comments;
+use crate::languages::language_maps::{get_markers_by_extension, get_markers_by_filename};
 
 /// Processes a file by removing comments based on its language.
 /// Returns the processed content as a string.
 /// If the language cannot be detected, returns the original content.
 pub fn process_from_file_path(path: PathBuf) -> Result<String, String> {
     verify_file_exists(&path)?;
-    let language = detect_language(&path);
+    let markers = detect_markers(&path);
     let content = read_file_content(&path)?;
-    let processed_content = process_from_language(language, content)?;
+    let processed_content = process_with_markers(markers, content)?;
     Ok(processed_content)
 }
 
-/// Processes the content of a file based on the language.
+/// Processes the content of a file based on the markers.
 /// Returns the processed content as a string.
-/// If the language is missing, returns the original content.
-/// Returns an error if comment configuration is not found for the language.
-pub fn process_from_language(
-    language: Option<&'static str>,
+/// If no markers are found, returns the original content.
+pub fn process_with_markers(
+    markers: Option<&'static [(&'static str, Option<&'static str>)]>,
     content: String,
 ) -> Result<String, String> {
-    if let Some(language) = language {
-        let comments = get_comments_by_language(language)
-            .ok_or_else(|| format!("Failed to load comment data for language: {}", language))?;
-
-        let processed_content = remove_comments(content, comments);
+    if let Some(markers) = markers {
+        let processed_content = remove_all_comments(&content, markers);
         Ok(processed_content)
     } else {
-        // Language not supported, return the original content
+        // No markers found, return the original content
         Ok(content)
     }
 }
@@ -46,19 +39,19 @@ fn verify_file_exists(path: &Path) -> Result<(), String> {
     Ok(())
 }
 
-/// Detects the programming language based on file extension or filename.
-/// Returns None if the language cannot be detected.
-fn detect_language(path: &Path) -> Option<&'static str> {
+/// Detects the comment markers based on file extension or filename.
+/// Returns None if no markers can be detected.
+fn detect_markers(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
     let file_name = path.file_name()?.to_string_lossy();
 
     let extension = get_file_extension(path);
     if let Some(ext) = &extension {
-        if let Some(lang) = get_language_by_extension(&ext.to_lowercase()) {
-            return Some(lang);
+        if let Some(markers) = get_markers_by_extension(&ext.to_lowercase()) {
+            return Some(markers);
         }
     }
 
-    get_language_by_filename(&file_name.to_lowercase())
+    get_markers_by_filename(&file_name.to_lowercase())
 }
 
 /// Gets the file extension with a leading dot.

@@ -1,8 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use std::path::PathBuf;
-use warrah::languages::language_maps::{
-    get_comments_by_language, get_language_by_extension, get_language_by_filename,
-};
+use warrah::languages::language_maps::get_markers_by_extension;
 
 fn generate_test_paths() -> Vec<String> {
     vec![
@@ -39,25 +36,18 @@ fn generate_test_paths() -> Vec<String> {
     ]
 }
 
-fn detect_language(extension: &str) -> Option<&'static str> {
-    // Then try to get language by extension
-    if let Some(lang) = get_language_by_extension(extension) {
-        return Some(lang);
-    }
-
-    None
-}
-
 fn benchmark_language_detection(c: &mut Criterion) {
-    let paths = generate_test_paths();
-    println!("== Testing with {} different language paths", paths.len());
+    let extensions = generate_test_paths();
 
-    c.bench_function("detect_language", |b| {
+    println!(
+        "== Testing with {} different language extensions",
+        extensions.len()
+    );
+
+    c.bench_function("detect_language_by_extension", |b| {
         b.iter(|| {
-            for path in &paths {
-                if let Some(language) = detect_language(black_box(path)) {
-                    let _comments = get_comments_by_language(black_box(language));
-                }
+            for ext in &extensions {
+                get_markers_by_extension(black_box(ext));
             }
         })
     });
