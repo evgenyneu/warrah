@@ -1,5 +1,27 @@
 use super::generated::{EXTENSION_TO_MARKERS, FILENAME_TO_MARKERS};
 
+/// Returns comment markers for a given file extension.
+///
+/// # Arguments
+///
+/// * `extension` - The file extension (must be lowercase, e.g. "rs", "py", "js")
+///
+/// # Returns
+///
+/// * `Option<&'static [(&'static str, Option<&'static str>)]>` - Array of comment markers if found:
+///   - `Some(markers)` - Array of tuples containing (start_marker, end_marker)
+///   - `None` - If extension is not recognized or not lowercase
+///
+/// # Examples
+///
+/// ```
+/// use warrah::languages::language_maps::get_markers_by_extension;
+///
+/// // Get Rust comment markers
+/// let markers = get_markers_by_extension("rs").unwrap();
+/// assert!(markers.contains(&("//", None))); // Single-line comments
+/// assert!(markers.contains(&("/*", Some("*/")))); // Multi-line comments
+/// ```
 pub fn get_markers_by_extension(
     extension: &str,
 ) -> Option<&'static [(&'static str, Option<&'static str>)]> {
@@ -9,6 +31,27 @@ pub fn get_markers_by_extension(
         .map(|idx| EXTENSION_TO_MARKERS[idx].1)
 }
 
+/// Returns comment markers for a given filename.
+///
+/// # Arguments
+///
+/// * `filename` - The filename (must be lowercase, e.g. "dockerfile", "makefile")
+///
+/// # Returns
+///
+/// * `Option<&'static [(&'static str, Option<&'static str>)]>` - Array of comment markers if found:
+///   - `Some(markers)` - Array of tuples containing (start_marker, end_marker)
+///   - `None` - If filename is not recognized or not lowercase
+///
+/// # Examples
+///
+/// ```
+/// use warrah::languages::language_maps::get_markers_by_filename;
+///
+/// // Get Dockerfile comment markers
+/// let markers = get_markers_by_filename("dockerfile").unwrap();
+/// assert!(markers.contains(&("#", None))); // Single-line comments
+/// ```
 pub fn get_markers_by_filename(
     filename: &str,
 ) -> Option<&'static [(&'static str, Option<&'static str>)]> {
