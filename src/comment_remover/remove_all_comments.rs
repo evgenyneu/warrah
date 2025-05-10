@@ -71,7 +71,11 @@ pub fn remove_all_comments(
                         if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
                             let comment_end = next_pos + end_pos + end_finder.needle().len();
                             let remaining = &line[comment_end..];
-                            if !remove_empty_lines || !remaining.trim().is_empty() {
+
+                            if !remove_empty_lines
+                                || !before_comment.trim().is_empty()
+                                || !remaining.trim().is_empty()
+                            {
                                 result.push_str(before_comment);
                                 result.push_str(remaining);
                                 result.push('\n');
@@ -79,6 +83,7 @@ pub fn remove_all_comments(
                         } else {
                             if !remove_empty_lines || !before_comment.trim().is_empty() {
                                 result.push_str(before_comment);
+                                result.push('\n');
                             }
                             active_multi = Some(idx);
                         }
@@ -234,7 +239,7 @@ mod tests {
 
         assert_eq!(
             result,
-            "let x = 1; \n    \n    let y = 2; \n    let z = 3;  let w = 4;\n"
+            "let x = 1; \n    \n\n    let y = 2; \n    let z = 3;  let w = 4;\n"
         );
     }
 
@@ -247,7 +252,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n    \n    let y = 2;");
+        assert_eq!(result, "let x = 1;\n    \n\n    let y = 2;");
     }
 
     #[test]
@@ -258,7 +263,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n   ");
+        assert_eq!(result, "let x = 1;\n    ");
     }
 
     #[test]
@@ -269,7 +274,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "\n    let y = 2;");
+        assert_eq!(result, "\n\n    let y = 2;");
     }
 
     #[test]
@@ -280,7 +285,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n    ");
+        assert_eq!(result, "let x = 1;\n    \n");
     }
 
     #[test]
@@ -292,7 +297,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1; \n    let y = 2;");
+        assert_eq!(result, "let x = 1; \n\n    let y = 2;");
     }
 
     #[test]
@@ -305,7 +310,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1; \n    let y = 2;");
+        assert_eq!(result, "let x = 1; \n\n    let y = 2;");
     }
 
     #[test]
@@ -333,6 +338,54 @@ mod tests {
     }
 
     #[test]
+    fn test_remove_empty_lines_single_line_comment_keep_before_text() {
+        let content = r#"let x = 1;
+    let y = 2; // comment only line
+"#;
+
+        let result = remove_all_comments(content, &[("//", None)], true);
+
+        assert_eq!(result, "let x = 1;\n    let y = 2; \n");
+    }
+
+    #[test]
+    fn test_remove_empty_lines_multi_line_comment_on_single_line_keep_before_text() {
+        let content = r#"let x = 1;
+    let y = 2; /* comment only line */
+"#;
+
+        let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
+
+        assert_eq!(result, "let x = 1;\n    let y = 2; \n");
+    }
+
+    #[test]
+    fn test_remove_empty_lines_multi_line_comment_on_multi_lines_keep_before_text() {
+        let content = r#"let x = 1;
+    let y = 2; /* comment only
+    line */
+    let y = 3;
+"#;
+
+        let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
+
+        assert_eq!(result, "let x = 1;\n    let y = 2; \n    let y = 3;\n");
+    }
+
+    #[test]
+    fn test_remove_empty_lines_multi_line_comment_on_multi_lines_keep_after_text() {
+        let content = r#"let x = 1;
+    let y = 2; /* comment
+    only
+    line */ let y = 3;
+"#;
+
+        let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
+
+        assert_eq!(result, "let x = 1;\n    let y = 2; \n let y = 3;\n");
+    }
+
+    #[test]
     fn test_remove_empty_lines_multi_line_comments() {
         let content = r#"let x = 1;
     /* multi-line
@@ -346,28 +399,6 @@ mod tests {
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
         assert_eq!(result, "let x = 1;\n    let y = 2;\n    let z = 3;");
-    }
-
-    #[test]
-    fn test_keep_empty_lines_when_disabled() {
-        let content = r#"let x = 1;
-    // comment only line
-    let y = 2;"#;
-
-        let result = remove_all_comments(content, &[("//", None)], false);
-
-        assert_eq!(result, "let x = 1;\n    \n    let y = 2;");
-    }
-
-    #[test]
-    fn test_remove_empty_lines_with_whitespace() {
-        let content = r#"let x = 1;
-        // comment only line
-    let y = 2;"#;
-
-        let result = remove_all_comments(content, &[("//", None)], true);
-
-        assert_eq!(result, "let x = 1;\n    let y = 2;");
     }
 
     #[test]
