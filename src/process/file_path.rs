@@ -120,6 +120,18 @@ mod tests {
     }
 
     #[test]
+    fn test_process_from_file_path_case_insensitive() {
+        let input_path = fixture_path("javascript/process_from_file_path_uppercase.JS");
+
+        let result = process_from_file_path(input_path, 10 * 1024).unwrap();
+
+        assert_eq_fixture(
+            &result,
+            "javascript/process_from_file_path_uppercase.expected.JS",
+        );
+    }
+
+    #[test]
     fn test_process_from_file_path_makefile() {
         let input_path = fixture_path("makefile/process_from_file_path/Makefile");
 
