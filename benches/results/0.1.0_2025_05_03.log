@@ -1,37 +1,64 @@
 CPU: 12th Gen Intel(R) Core(TM) i5-12600K | OS: Ubuntu 24.04.2 LTS
 
-     Running benches/comment_remover.rs (target/release/deps/comment_remover-60c96c5c4dad6169)
+    Running benches/comment_remover.rs (target/release/deps/comment_remover-60c96c5c4dad6169)
 Gnuplot not found, using plotters backend
-== Test content size: 20.75 KB
-remove_comments         time:   [17.877 µs 17.965 µs 18.064 µs]
-                        change: [-0.7413% -0.1488% +0.4888%] (p = 0.63 > 0.05)
-                        No change in performance detected.
-Found 1 outliers among 100 measurements (1.00%)
-  1 (1.00%) high mild
+== Test content size: 4.85 KB
+remove_comments         time:   [4.9957 µs 5.0248 µs 5.0542 µs]
+                        change: [-2.2266% -1.6577% -1.1203%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 16 outliers among 100 measurements (16.00%)
+  1 (1.00%) low mild
+  11 (11.00%) high mild
+  4 (4.00%) high severe
 
      Running benches/comment_remover_large_file.rs (target/release/deps/comment_remover_large_file-6776a4660b061ad7)
 Gnuplot not found, using plotters backend
-== Test content size: 16.21 MB
+== Test content size: 47.34 MB
+Benchmarking remove_comments_large_file: Warming up for 3.0000 s
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 5.6s, or reduce sample count to 80.
 remove_comments_large_file
-                        time:   [14.108 ms 14.152 ms 14.201 ms]
-                        change: [-1.5578% -1.0530% -0.5395%] (p = 0.00 < 0.05)
-                        Change within noise threshold.
-Found 11 outliers among 100 measurements (11.00%)
-  5 (5.00%) high mild
-  6 (6.00%) high severe
+                        time:   [55.057 ms 55.385 ms 55.722 ms]
+                        change: [-1.4532% -0.5766% +0.2891%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
 
      Running benches/comment_remover_single_line.rs (target/release/deps/comment_remover_single_line-2cce510afc505b7d)
 Gnuplot not found, using plotters backend
 == Test content size: 20.84 KB
 remove_single_line_comments
-                        time:   [14.018 µs 14.097 µs 14.177 µs]
-                        change: [-0.7475% -0.0329% +0.6893%] (p = 0.94 > 0.05)
+                        time:   [14.511 µs 14.568 µs 14.632 µs]
+                        change: [-1.5522% -0.7690% +0.0275%] (p = 0.06 > 0.05)
                         No change in performance detected.
+Found 12 outliers among 100 measurements (12.00%)
+  4 (4.00%) high mild
+  8 (8.00%) high severe
 
      Running benches/detect_language.rs (target/release/deps/detect_language-8b48e1b34e83e69e)
 Gnuplot not found, using plotters backend
 == Testing with 30 different language extensions
 detect_language_by_extension
-                        time:   [773.33 ns 776.99 ns 780.74 ns]
-                        change: [-2.0113% -1.4692% -0.9435%] (p = 0.00 < 0.05)
-                        Change within noise threshold.
+                        time:   [761.54 ns 763.47 ns 765.57 ns]
+                        change: [-0.6846% -0.1692% +0.3411%] (p = 0.52 > 0.05)
+                        No change in performance detected.
+Found 8 outliers among 100 measurements (8.00%)
+  6 (6.00%) high mild
+  2 (2.00%) high severe
+
+     Running benches/integration.rs (target/release/deps/integration-17ccb0cc8dd55b91)
+Gnuplot not found, using plotters backend
+main_success_run        time:   [4.0168 ms 4.1662 ms 4.3019 ms]
+                        change: [-7.7977% -3.4843% +0.3370%] (p = 0.09 > 0.05)
+                        No change in performance detected.
+Found 17 outliers among 100 measurements (17.00%)
+  11 (11.00%) low severe
+  6 (6.00%) low mild
+
+     Running benches/integration_call_function.rs (target/release/deps/integration_call_function-20a2ad6cb20a657f)
+Gnuplot not found, using plotters backend
+integration_call_function
+                        time:   [6.4727 µs 6.5070 µs 6.5461 µs]
+                        change: [-0.6922% -0.0867% +0.5669%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Found 7 outliers among 100 measurements (7.00%)
+  7 (7.00%) high mild
