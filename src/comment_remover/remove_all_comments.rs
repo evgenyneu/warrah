@@ -34,12 +34,10 @@ pub fn remove_all_comments(
 
             if let Some(end_pos) = end_finder.find(line.as_bytes()) {
                 let remaining = &line[end_pos + end_finder.needle().len()..];
-
                 if !remove_empty_lines || !remaining.trim().is_empty() {
                     result.push_str(remaining);
                     result.push('\n');
                 }
-
                 active_multi = None;
             }
         } else {
@@ -88,10 +86,8 @@ pub fn remove_all_comments(
                 }
             } else {
                 // No markers, copy the entire line
-                if !remove_empty_lines || !line.trim().is_empty() {
-                    result.push_str(line);
-                    result.push('\n');
-                }
+                result.push_str(line);
+                result.push('\n');
             }
         }
     }

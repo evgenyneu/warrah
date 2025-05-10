@@ -7,7 +7,6 @@
 /* This is a multi-line comment
    that spans multiple lines
    and should be removed */
-
 function example() {
     // This is a comment inside a function
     console.log("Hello, world!");
