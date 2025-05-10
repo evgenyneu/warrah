@@ -20,6 +20,7 @@ fn benchmark_comment_removal_single_line(c: &mut Criterion) {
             remove_all_comments(
                 black_box(&content),
                 black_box(&[("//", None), ("<--", None)]),
+                true,
             )
         })
     });

@@ -28,6 +28,7 @@ fn benchmark_comment_removal(c: &mut Criterion) {
             remove_all_comments(
                 black_box(&content),
                 black_box(&[("//", None), ("some_marker", None), ("/*", Some("*/"))]),
+                true,
             )
         })
     });
