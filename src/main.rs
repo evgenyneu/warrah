@@ -6,6 +6,8 @@ mod test_utils;
 use crate::process::file_path::process_from_file_path;
 use std::path::PathBuf;
 
+pub const MAX_FILE_SIZE: u64 = 100 * 1024 * 1024; // 100MB
+
 fn print_help() {
     println!("warrah - removes comments from code files");
     println!("\nUsage: warrah [PATH]");
@@ -25,9 +27,8 @@ fn main() {
         std::process::exit(1);
     }
 
-    let file_path = PathBuf::from(&args[1]);
-
-    match process_from_file_path(file_path) {
+    let path = PathBuf::from(&args[1]);
+    match process_from_file_path(path, MAX_FILE_SIZE) {
         Ok(content) => print!("{}", content),
         Err(error) => {
             eprintln!("Error: {}", error);

@@ -7,8 +7,9 @@ use crate::languages::language_maps::{get_markers_by_extension, get_markers_by_f
 /// Processes a file by removing comments based on its language.
 /// Returns the processed content as a string.
 /// Returns an error if the language cannot be detected or if the file cannot be read.
-pub fn process_from_file_path(path: PathBuf) -> Result<String, String> {
+pub fn process_from_file_path(path: PathBuf, max_size: u64) -> Result<String, String> {
     verify_file_exists(&path)?;
+    verify_file_size(&path, max_size)?;
 
     let markers = get_marker_by_file_path(&path).ok_or_else(|| {
         format!(
@@ -37,6 +38,23 @@ pub fn process_with_markers(
 fn verify_file_exists(path: &Path) -> Result<(), String> {
     if !path.exists() {
         return Err(format!("File does not exist: {}", path.display()));
+    }
+    Ok(())
+}
+
+/// Verifies that the file size is within the allowed limit.
+fn verify_file_size(path: &Path, max_size: u64) -> Result<(), String> {
+    let metadata =
+        fs::metadata(path).map_err(|e| format!("Failed to read file metadata: {}", e))?;
+    let size = metadata.len();
+
+    if size > max_size {
+        return Err(format!(
+            "File too large ({} bytes). Maximum allowed size is {} bytes: {}",
+            size,
+            max_size,
+            path.display()
+        ));
     }
     Ok(())
 }
