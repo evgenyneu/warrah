@@ -42,13 +42,16 @@ fn verify_file_exists(path: &Path) -> Result<(), String> {
 /// Returns the comment markers for the given path to a file.
 /// Returns None if no markers can be detected.
 fn get_marker_by_file_path(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
-    if let Some(ext) = path.extension() {
-        if let Some(markers) = get_markers_by_extension(&ext.to_str().unwrap().to_lowercase()) {
-            return Some(markers);
-        }
-    }
-
-    get_markers_by_filename(&path.file_name()?.to_string_lossy().to_lowercase())
+    path.extension()
+        .and_then(|ext| ext.to_str())
+        .map(|ext| ext.to_lowercase())
+        .and_then(|ext| get_markers_by_extension(&ext))
+        .or_else(|| {
+            path.file_name()
+                .and_then(|name| name.to_str())
+                .map(|name| name.to_lowercase())
+                .and_then(|name| get_markers_by_filename(&name))
+        })
 }
 
 /// Reads the content of a file.
@@ -73,6 +76,16 @@ mod tests {
     #[test]
     fn test_get_marker_by_file_path_with_just_filename_and_extension() {
         let rust_path = PathBuf::from("test.RS");
+        let markers = get_marker_by_file_path(&rust_path).unwrap();
+
+        assert_eq!(markers.len(), 2);
+        assert_eq!(markers[0], ("//", None));
+        assert_eq!(markers[1], ("/*", Some("*/")));
+    }
+
+    #[test]
+    fn test_get_marker_by_file_path_unicode() {
+        let rust_path = PathBuf::from("テスト.rs");
         let markers = get_marker_by_file_path(&rust_path).unwrap();
 
         assert_eq!(markers.len(), 2);
