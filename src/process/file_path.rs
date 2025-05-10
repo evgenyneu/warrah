@@ -6,10 +6,17 @@ use crate::languages::language_maps::{get_markers_by_extension, get_markers_by_f
 
 /// Processes a file by removing comments based on its language.
 /// Returns the processed content as a string.
-/// If the language cannot be detected, returns the original content.
+/// Returns an error if the language cannot be detected or if the file cannot be read.
 pub fn process_from_file_path(path: PathBuf) -> Result<String, String> {
     verify_file_exists(&path)?;
-    let markers = get_marker_by_file_path(&path);
+
+    let markers = get_marker_by_file_path(&path).ok_or_else(|| {
+        format!(
+            "Failed to detect programming language for file: {}",
+            path.display()
+        )
+    })?;
+
     let content = read_file_content(&path)?;
     let processed_content = process_with_markers(markers, content)?;
     Ok(processed_content)
@@ -19,16 +26,11 @@ pub fn process_from_file_path(path: PathBuf) -> Result<String, String> {
 /// Returns the processed content as a string.
 /// If no markers are found, returns the original content.
 pub fn process_with_markers(
-    markers: Option<&'static [(&'static str, Option<&'static str>)]>,
+    markers: &'static [(&'static str, Option<&'static str>)],
     content: String,
 ) -> Result<String, String> {
-    if let Some(markers) = markers {
-        let processed_content = remove_all_comments(&content, markers);
-        Ok(processed_content)
-    } else {
-        // No markers found, return the original content
-        Ok(content)
-    }
+    let processed_content = remove_all_comments(&content, markers);
+    Ok(processed_content)
 }
 
 /// Verifies that the file exists at the given path.
