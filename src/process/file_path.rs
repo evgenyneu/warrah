@@ -42,22 +42,13 @@ fn verify_file_exists(path: &Path) -> Result<(), String> {
 /// Returns the comment markers for the given path to a file.
 /// Returns None if no markers can be detected.
 fn get_marker_by_file_path(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
-    let file_name = path.file_name()?.to_string_lossy();
-
-    let extension = get_file_extension(path);
-    if let Some(ext) = &extension {
-        if let Some(markers) = get_markers_by_extension(&ext.to_lowercase()) {
+    if let Some(ext) = path.extension() {
+        if let Some(markers) = get_markers_by_extension(&ext.to_str().unwrap().to_lowercase()) {
             return Some(markers);
         }
     }
 
-    get_markers_by_filename(&file_name.to_lowercase())
-}
-
-fn get_file_extension(path: &Path) -> Option<String> {
-    path.extension()
-        .and_then(|ext| ext.to_str())
-        .map(|s| s.to_string())
+    get_markers_by_filename(&path.file_name()?.to_string_lossy().to_lowercase())
 }
 
 /// Reads the content of a file.
@@ -75,7 +66,35 @@ mod tests {
         let markers = get_marker_by_file_path(&rust_path).unwrap();
 
         assert_eq!(markers.len(), 2);
-        assert!(markers.contains(&("//", None)));
-        assert!(markers.contains(&("/*", Some("*/"))));
+        assert_eq!(markers[0], ("//", None));
+        assert_eq!(markers[1], ("/*", Some("*/")));
+    }
+
+    #[test]
+    fn test_get_marker_by_file_path_with_just_filename_and_extension() {
+        let rust_path = PathBuf::from("test.RS");
+        let markers = get_marker_by_file_path(&rust_path).unwrap();
+
+        assert_eq!(markers.len(), 2);
+        assert_eq!(markers[0], ("//", None));
+        assert_eq!(markers[1], ("/*", Some("*/")));
+    }
+
+    #[test]
+    fn test_get_marker_by_file_path_with_just_filename_with_dir() {
+        let rust_path = PathBuf::from("/home/MaKeFiLe");
+        let markers = get_marker_by_file_path(&rust_path).unwrap();
+
+        assert_eq!(markers.len(), 1);
+        assert_eq!(markers[0], ("#", None));
+    }
+
+    #[test]
+    fn test_get_marker_by_file_path_with_just_filename_without_dir() {
+        let rust_path = PathBuf::from("MaKeFiLe");
+        let markers = get_marker_by_file_path(&rust_path).unwrap();
+
+        assert_eq!(markers.len(), 1);
+        assert_eq!(markers[0], ("#", None));
     }
 }
