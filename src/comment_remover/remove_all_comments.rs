@@ -34,7 +34,7 @@ pub fn remove_all_comments(
 
             if let Some(end_pos) = end_finder.find(line.as_bytes()) {
                 let remaining = &line[end_pos + end_finder.needle().len()..];
-                if !remove_empty_lines || !remaining.trim().is_empty() {
+                if !remove_empty_lines || !remaining.chars().all(|c| c.is_whitespace()) {
                     result.push_str(remaining);
                     result.push('\n');
                 }
@@ -61,7 +61,8 @@ pub fn remove_all_comments(
                 match &finders[idx].1 {
                     None => {
                         // Single-line comment
-                        if !remove_empty_lines || !before_comment.trim().is_empty() {
+                        if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace())
+                        {
                             result.push_str(before_comment);
                             result.push('\n');
                         }
@@ -73,15 +74,17 @@ pub fn remove_all_comments(
                             let remaining = &line[comment_end..];
 
                             if !remove_empty_lines
-                                || !before_comment.trim().is_empty()
-                                || !remaining.trim().is_empty()
+                                || !before_comment.chars().all(|c| c.is_whitespace())
+                                || !remaining.chars().all(|c| c.is_whitespace())
                             {
                                 result.push_str(before_comment);
                                 result.push_str(remaining);
                                 result.push('\n');
                             }
                         } else {
-                            if !remove_empty_lines || !before_comment.trim().is_empty() {
+                            if !remove_empty_lines
+                                || !before_comment.chars().all(|c| c.is_whitespace())
+                            {
                                 result.push_str(before_comment);
                                 result.push('\n');
                             }
