@@ -71,6 +71,7 @@ fn read_file_content(path: &Path) -> Result<String, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::fixture::{assert_eq_fixture, fixture_path};
 
     #[test]
     fn test_get_marker_by_file_path() {
@@ -118,5 +119,13 @@ mod tests {
 
         assert_eq!(markers.len(), 1);
         assert_eq!(markers[0], ("#", None));
+    }
+
+    #[test]
+    fn test_process_from_file_path() {
+        let input_path = fixture_path("javascript/process_from_file_path.js");
+        let result = process_from_file_path(input_path, 1024 * 1024).unwrap();
+
+        assert_eq_fixture(&result, "javascript/process_from_file_path.expected.js");
     }
 }
