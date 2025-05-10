@@ -7,7 +7,7 @@ fn bench_integration_call_function(c: &mut Criterion) {
 
     c.bench_function("integration_call_function", |b| {
         b.iter(|| {
-            let output = remove_comments(input_path.clone(), 10 * 1024).unwrap();
+            let output = remove_comments(input_path.clone(), 10 * 1024, true).unwrap();
             black_box(output)
         })
     });

@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 use std::process::Command;
 use warrah::test_utils::fixture::fixture_path;
 
@@ -13,7 +13,7 @@ fn bench_main_success_run(c: &mut Criterion) {
                 .output()
                 .expect("Failed to run warrah");
 
-            black_box(output)
+            assert!(output.status.success());
         })
     });
 }
