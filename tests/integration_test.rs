@@ -16,6 +16,6 @@ fn test_main_success_run() {
         output.status
     );
 
-    // let output_str = String::from_utf8(output.stdout).expect("Failed to convert output to string");
-    // assert_eq_fixture(&output_str, "javascript/main_success.expected.js");
+    let output_str = String::from_utf8(output.stdout).expect("Failed to convert output to string");
+    assert_eq_fixture(&output_str, "javascript/main_success.expected.js");
 }
