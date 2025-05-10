@@ -3,7 +3,7 @@ mod languages;
 mod process;
 mod test_utils;
 
-use crate::process::file_path::process_from_file_path;
+use crate::process::file_path::remove_comments_from_file_path;
 use std::path::PathBuf;
 
 pub const MAX_FILE_SIZE: u64 = 100 * 1024 * 1024; // 100MB
@@ -28,7 +28,7 @@ fn main() {
     }
 
     let path = PathBuf::from(&args[1]);
-    match process_from_file_path(path, MAX_FILE_SIZE) {
+    match remove_comments_from_file_path(path, MAX_FILE_SIZE) {
         Ok(content) => print!("{}", content),
         Err(error) => {
             eprintln!("Error: {}", error);

@@ -66,14 +66,14 @@ mod tests {
 
     #[test]
     fn test_verify_file_size_success() {
-        let path = fixture_path("javascript/process_from_file_path.js");
+        let path = fixture_path("javascript/remove_comments.js");
         let result = verify_file_size(&path, 10 * 1024);
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_verify_file_size_too_large() {
-        let path = fixture_path("javascript/process_from_file_path.js");
+        let path = fixture_path("javascript/remove_comments.js");
 
         let result = verify_file_size(&path, 10);
 
