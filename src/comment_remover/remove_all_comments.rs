@@ -1,5 +1,34 @@
 use memchr::memmem;
 
+/// Removes comments from text content based on provided comment markers.
+///
+/// # Arguments
+///
+/// * `content` - The text content to process
+/// * `markers` - Array of comment markers where each marker is a tuple of:
+///   - `&str`: The start marker (e.g. "//" for single-line comments)
+///   - `Option<&str>`: The end marker for multi-line comments (e.g. Some("*/") for /* */)
+/// * `remove_empty_lines` - Whether to remove lines that become empty after comment removal
+///
+/// # Returns
+///
+/// * `String` - The processed content with comments removed
+///
+/// # Examples
+///
+/// ```
+/// use warrah::comment_remover::remove_all_comments::remove_all_comments;
+///
+/// // Remove single-line comments
+/// let content = "let x = 1; // comment\nlet y = 2;";
+/// let result = remove_all_comments(content, &[("//", None)], true);
+/// assert_eq!(result, "let x = 1; \nlet y = 2;");
+///
+/// // Remove multi-line comments
+/// let content = "let x = 1; /* comment */\nlet y = 2;";
+/// let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
+/// assert_eq!(result, "let x = 1; \nlet y = 2;");
+/// ```
 pub fn remove_all_comments(
     content: &str,
     markers: &[(&str, Option<&str>)],
