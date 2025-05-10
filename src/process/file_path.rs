@@ -9,7 +9,7 @@ use crate::languages::language_maps::{get_markers_by_extension, get_markers_by_f
 /// If the language cannot be detected, returns the original content.
 pub fn process_from_file_path(path: PathBuf) -> Result<String, String> {
     verify_file_exists(&path)?;
-    let markers = detect_markers(&path);
+    let markers = get_marker_by_file_path(&path);
     let content = read_file_content(&path)?;
     let processed_content = process_with_markers(markers, content)?;
     Ok(processed_content)
@@ -39,9 +39,9 @@ fn verify_file_exists(path: &Path) -> Result<(), String> {
     Ok(())
 }
 
-/// Detects the comment markers based on file extension or filename.
+/// Returns the comment markers for the given path to a file.
 /// Returns None if no markers can be detected.
-fn detect_markers(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
+fn get_marker_by_file_path(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
     let file_name = path.file_name()?.to_string_lossy();
 
     let extension = get_file_extension(path);
@@ -63,4 +63,19 @@ fn get_file_extension(path: &Path) -> Option<String> {
 /// Reads the content of a file.
 fn read_file_content(path: &Path) -> Result<String, String> {
     fs::read_to_string(path).map_err(|e| format!("Failed to read file: {}", e))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_marker_by_file_path() {
+        let rust_path = PathBuf::from("/dir/test.RS");
+        let markers = get_marker_by_file_path(&rust_path).unwrap();
+
+        assert_eq!(markers.len(), 2);
+        assert!(markers.contains(&("//", None)));
+        assert!(markers.contains(&("/*", Some("*/"))));
+    }
 }
