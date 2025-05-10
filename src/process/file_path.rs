@@ -8,7 +8,7 @@ use crate::process::file_size::verify_file_size;
 /// Processes a file by removing comments based on its language.
 /// Returns the processed content as a string.
 /// Returns an error if the language cannot be detected or if the file cannot be read.
-pub fn remove_comments_from_file_path(path: PathBuf, max_size: u64) -> Result<String, String> {
+pub fn remove_comments(path: PathBuf, max_size: u64) -> Result<String, String> {
     verify_file_exists(&path)?;
     verify_file_size(&path, max_size)?;
 
@@ -114,7 +114,7 @@ mod tests {
     fn test_remove_comments() {
         let input_path = fixture_path("javascript/remove_comments.js");
 
-        let result = remove_comments_from_file_path(input_path, 10 * 1024).unwrap();
+        let result = remove_comments(input_path, 10 * 1024).unwrap();
 
         assert_eq_fixture(&result, "javascript/remove_comments.expected.js");
     }
@@ -123,7 +123,7 @@ mod tests {
     fn test_remove_comments_case_insensitive() {
         let input_path = fixture_path("javascript/remove_comments_uppercase.JS");
 
-        let result = remove_comments_from_file_path(input_path, 10 * 1024).unwrap();
+        let result = remove_comments(input_path, 10 * 1024).unwrap();
 
         assert_eq_fixture(&result, "javascript/remove_comments_uppercase.expected.JS");
     }
@@ -132,14 +132,14 @@ mod tests {
     fn test_remove_comments_makefile() {
         let input_path = fixture_path("makefile/remove_comments/Makefile");
 
-        let result = remove_comments_from_file_path(input_path, 10 * 1024).unwrap();
+        let result = remove_comments(input_path, 10 * 1024).unwrap();
 
         assert_eq_fixture(&result, "makefile/remove_comments/expected.Makefile");
     }
 
     #[test]
     fn test_remove_comments_file_not_found() {
-        let result = remove_comments_from_file_path(PathBuf::from("non_existent.js"), 10 * 1024);
+        let result = remove_comments(PathBuf::from("non_existent.js"), 10 * 1024);
 
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("File does not exist"));
@@ -149,7 +149,7 @@ mod tests {
     fn test_remove_comments_file_too_large() {
         let input_path = fixture_path("javascript/remove_comments.js");
 
-        let result = remove_comments_from_file_path(input_path.clone(), 10);
+        let result = remove_comments(input_path.clone(), 10);
 
         assert!(result.is_err());
         assert_eq!(
@@ -165,7 +165,7 @@ mod tests {
     fn test_remove_comments_unknown_language() {
         let path = fixture_path("unknown/remove_comments.xyz");
 
-        let result = remove_comments_from_file_path(path.clone(), 10 * 1024);
+        let result = remove_comments(path.clone(), 10 * 1024);
 
         assert!(result.is_err());
 
