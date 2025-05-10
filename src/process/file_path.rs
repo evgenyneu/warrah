@@ -19,17 +19,6 @@ pub fn process_from_file_path(path: PathBuf, max_size: u64) -> Result<String, St
     })?;
 
     let content = read_file_content(&path)?;
-    let processed_content = process_with_markers(markers, content)?;
-    Ok(processed_content)
-}
-
-/// Processes the content of a file based on the markers.
-/// Returns the processed content as a string.
-/// If no markers are found, returns the original content.
-pub fn process_with_markers(
-    markers: &'static [(&'static str, Option<&'static str>)],
-    content: String,
-) -> Result<String, String> {
     let processed_content = remove_all_comments(&content, markers);
     Ok(processed_content)
 }
