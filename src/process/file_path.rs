@@ -151,4 +151,21 @@ mod tests {
             )
         );
     }
+
+    #[test]
+    fn test_process_from_file_path_unknown_language() {
+        let path = fixture_path("unknown/process_from_file_path.xyz");
+
+        let result = process_from_file_path(path.clone(), 10 * 1024);
+
+        assert!(result.is_err());
+
+        assert_eq!(
+            result.unwrap_err(),
+            format!(
+                "Failed to detect programming language for file: {}",
+                path.display()
+            )
+        );
+    }
 }
