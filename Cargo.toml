@@ -35,6 +35,10 @@ name = "warrah"
 path = "src/main.rs"
 
 [[bench]]
+name = "integration"
+harness = false
+
+[[bench]]
 name = "comment_remover"
 harness = false
 
