@@ -60,7 +60,7 @@ mod tests {
     #[test]
     fn test_get_marker_by_file_path() {
         let rust_path = PathBuf::from("/dir/test.RS");
-        
+
         let markers = get_marker_by_file_path(&rust_path).unwrap();
 
         assert_eq!(markers.len(), 2);
@@ -117,6 +117,15 @@ mod tests {
         let result = process_from_file_path(input_path, 10 * 1024).unwrap();
 
         assert_eq_fixture(&result, "javascript/process_from_file_path.expected.js");
+    }
+
+    #[test]
+    fn test_process_from_file_path_makefile() {
+        let input_path = fixture_path("makefile/process_from_file_path/Makefile");
+
+        let result = process_from_file_path(input_path, 10 * 1024).unwrap();
+
+        assert_eq_fixture(&result, "makefile/process_from_file_path/expected.Makefile");
     }
 
     #[test]
