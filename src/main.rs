@@ -28,6 +28,7 @@ fn main() {
     }
 
     let path = PathBuf::from(&args[1]);
+
     match remove_comments(path, MAX_FILE_SIZE, true) {
         Ok(content) => print!("{}", content),
         Err(error) => {
