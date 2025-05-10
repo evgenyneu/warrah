@@ -20,7 +20,7 @@ pub fn process_from_file_path(path: PathBuf, max_size: u64) -> Result<String, St
     })?;
 
     let content = read_file_content(&path)?;
-    let processed_content = remove_all_comments(&content, markers);
+    let processed_content = remove_all_comments(&content, markers, true);
     Ok(processed_content)
 }
 
