@@ -373,4 +373,15 @@ mod tests {
 
         assert_eq!(result, "let x = 1;\n    let y = 2;");
     }
+
+    #[test]
+    fn test_remove_keep_empty_lines_without_comments() {
+        let content = r#"let x = 1;
+
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("//", None)], true);
+
+        assert_eq!(result, "let x = 1;\n\n    let y = 2;");
+    }
 }
