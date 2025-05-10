@@ -1,20 +1,10 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use warrah::comment_remover::remove_all_comments::remove_all_comments;
+use warrah::test_utils::fixture::fixture_text;
 
 fn generate_test_content() -> String {
-    let template = r#"let x = 1; // single line comment
-    /* multi-line
-       nice
-       comment */
-    let y = 2; // another single line
-    let z = 3; /* inline multi-line */ let w = 4;
-"#;
-
-    let mut content = String::with_capacity(1024 * 500);
-    for _ in 0..100000 {
-        content.push_str(template);
-    }
-    content
+    let content = fixture_text("javascript/benches/comment_remover.js");
+    content.repeat(10000)
 }
 
 fn benchmark_comment_removal_large_file(c: &mut Criterion) {
