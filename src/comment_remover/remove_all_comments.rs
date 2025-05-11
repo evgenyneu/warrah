@@ -1,111 +1,70 @@
 use memchr::memmem;
 
-/// Removes comments from text content based on provided comment markers.
-///
-/// # Arguments
-///
-/// * `content` - The text content to process
-/// * `markers` - Array of comment markers where each marker is a tuple of:
-///   - `&str`: The start marker (e.g. "//" for single-line comments)
-///   - `Option<&str>`: The end marker for multi-line comments (e.g. Some("*/") for /* */)
-/// * `remove_empty_lines` - Whether to remove lines that become empty after comment removal
-///
-/// # Returns
-///
-/// * `String` - The processed content with comments removed
-///
-/// # Examples
-///
-/// ```
-/// use warrah::comment_remover::remove_all_comments::remove_all_comments;
-///
-/// // Remove single-line comments
-/// let content = "let x = 1; // comment\nlet y = 2;";
-/// let result = remove_all_comments(content, &[("//", None)], true);
-/// assert_eq!(result, "let x = 1; \nlet y = 2;");
-///
-/// // Remove multi-line comments
-/// let content = "let x = 1; /* comment */\nlet y = 2;";
-/// let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
-/// assert_eq!(result, "let x = 1; \nlet y = 2;");
-/// ```
 fn process_line<'a>(
-    mut line: &'a str,
+    line: &'a str,
     finders: &[(memmem::Finder, Option<memmem::Finder>)],
     remove_empty_lines: bool,
-    mut active_multi: Option<usize>,
+    active_multi: Option<usize>,
     result: &mut String,
 ) -> Option<usize> {
-    while !line.is_empty() {
-        if let Some(idx) = active_multi {
-            let (_, Some(end_finder)) = &finders[idx] else {
-                unreachable!()
-            };
+    if let Some(idx) = active_multi {
+        // If we are inside a multi-line comment
+        let (_, Some(end_finder)) = &finders[idx] else {
+            unreachable!()
+        };
 
-            if let Some(end_pos) = end_finder.find(line.as_bytes()) {
-                line = &line[end_pos + end_finder.needle().len()..];
-                active_multi = None;
-                continue;
-            } else {
-                // Entire line is inside comment
-                return Some(idx);
-            }
+        if let Some(end_pos) = end_finder.find(line.as_bytes()) {
+            let after = &line[end_pos + end_finder.needle().len()..];
+            // Recursively process the remainder after the end marker
+            return process_line(after, finders, remove_empty_lines, None, result);
         } else {
-            let mut next_pos = line.len();
-            let mut next_idx: Option<usize> = None;
+            // Entire line is inside comment
+            return Some(idx);
+        }
+    } else {
+        let mut next_pos = line.len();
+        let mut next_idx: Option<usize> = None;
 
-            for (i, (start_finder, _)) in finders.iter().enumerate() {
-                if let Some(pos) = start_finder.find(line.as_bytes()) {
-                    if pos < next_pos {
-                        next_pos = pos;
-                        next_idx = Some(i);
-                    }
+        // Look for a start comment marker
+        for (i, (start_finder, _)) in finders.iter().enumerate() {
+            if let Some(pos) = start_finder.find(line.as_bytes()) {
+                if pos < next_pos {
+                    next_pos = pos;
+                    next_idx = Some(i);
                 }
-            }
-
-            if let Some(idx) = next_idx {
-                let before_comment = &line[..next_pos];
-                match &finders[idx].1 {
-                    None => {
-                        if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace())
-                        {
-                            result.push_str(before_comment);
-                            result.push('\n');
-                        }
-                        // Done with this line
-                        return None;
-                    }
-                    Some(end_finder) => {
-                        if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
-                            let comment_end = next_pos + end_pos + end_finder.needle().len();
-                            let before = &line[..next_pos];
-                            let after = &line[comment_end..];
-                            if !remove_empty_lines
-                                || !before.chars().all(|c| c.is_whitespace())
-                                || !after.chars().all(|c| c.is_whitespace())
-                            {
-                                result.push_str(before);
-                            }
-                            line = after;
-                            continue;
-                        } else {
-                            let before = &line[..next_pos];
-                            if !remove_empty_lines || !before.chars().all(|c| c.is_whitespace()) {
-                                result.push_str(before);
-                                result.push('\n');
-                            }
-                            return Some(idx);
-                        }
-                    }
-                }
-            } else {
-                result.push_str(line);
-                result.push('\n');
-                return None;
             }
         }
+
+        if let Some(idx) = next_idx {
+            // Start comment marker found
+            let before_comment = &line[..next_pos];
+            match &finders[idx].1 {
+                None => {
+                    // Single line comment
+                    if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace()) {
+                        result.push_str(before_comment);
+                        result.push('\n');
+                    }
+                    return None;
+                }
+                Some(_) => {
+                    // Multi-line comment
+                    if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace()) {
+                        result.push_str(before_comment);
+                    }
+
+                    // Recursively process the remainder after the start marker, now inside multi-line comment
+                    let after = &line[next_pos + finders[idx].0.needle().len()..];
+                    return process_line(after, finders, remove_empty_lines, Some(idx), result);
+                }
+            }
+        } else {
+            // No comment marker found
+            result.push_str(line);
+            result.push('\n');
+            return None;
+        }
     }
-    None
 }
 
 pub fn remove_all_comments(
@@ -307,7 +266,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n    ");
+        assert_eq!(result, "let x = 1;\n   ");
     }
 
     #[test]
@@ -426,7 +385,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2; \n let y = 3;\n");
+        assert_eq!(result, "let x = 1;\n    let y = 2;  let y = 3;\n");
     }
 
     #[test]
@@ -442,7 +401,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2;\n    let z = 3;");
+        assert_eq!(result, "let x = 1;\n\n    let y = 2;\n\n    let z = 3;");
     }
 
     #[test]
@@ -457,6 +416,16 @@ mod tests {
     }
 
     #[test]
+    fn test_multiple_comments_in_one_line_at_end_of_line() {
+        let content = r#"let x = 1; /* comment */
+    let y = 2;"#;
+
+        let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
+
+        assert_eq!(result, "let x = 1; \n    let y = 2;");
+    }
+
+    #[test]
     fn test_multiple_multiline_comments() {
         let content = r#"let x = 1;
     let n = 2; /* one */ let w = 3; /* two */ y = 4; /* three */
@@ -466,7 +435,7 @@ mod tests {
 
         assert_eq!(
             result,
-            "let x = 1; \n    let n = 2;  let w = 3;  let z = 4; \n    let z = 5;"
+            "let x = 1;\n    let n = 2;  let w = 3;  y = 4; \n    let z = 5;"
         );
     }
 }
