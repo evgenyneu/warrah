@@ -82,7 +82,7 @@ mod tests {
         assert_eq!(
             result.unwrap_err(),
             format!(
-                "File too large (372 bytes). Maximum allowed size is 10 bytes: {}",
+                "File too large (5.1 KB). Maximum allowed size is 10 bytes: {}",
                 path.display()
             )
         );

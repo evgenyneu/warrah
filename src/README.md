@@ -1,8 +1,8 @@
 # Warrah Library
 
-A Rust library that removes code comments from text files. Supports [60+ programming languages](../docs/languages.md).
+A Rust library that sloppily removes code comments from a text file. Supports [60+ programming languages](../docs/languages.md).
 
-This is a very sloppy comments remover because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code.
+It's a sloppy program because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code.
 
 The main use of this utility is to strip comments from code in order to feed it to an LLM, where occasionally incorrect code is fine. Thus the main focus here is on speed, low resource usage, language coverage and simplicity, not correctness.
 
@@ -46,3 +46,7 @@ let markers = get_markers_by_extension("rs")?;
 // Get comment markers by filename (must be lowercase)
 let markers = get_markers_by_filename("dockerfile")?;
 ```
+
+## The unlicense
+
+This work is in public domain.

@@ -5,13 +5,13 @@
 
 # Warrah
 
-`warrah` is a command-line utility and a Rust library that **naively** removes code comments from a text file and outputs the result to stdout:
+`warrah` is a command-line utility and a Rust library that **sloppily** removes code comments from a text file and outputs the result to stdout:
 
 ```sh
 > warrah code.py
 ```
 
-Please note Warrah is a sloppy comments remover because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code.
+It's a sloppy program because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code.
 
 The main use of this utility is to strip comments from code in order to feed it to an LLM, where occasionally incorrect code is fine. Thus the main focus here is on speed, low resource usage, language coverage and simplicity, not correctness.
 
@@ -68,9 +68,9 @@ Download a pre-built binary from the [GitHub Releases page](https://github.com/e
 warrah [PATH]
 ```
 
-*PATH*: The path to the code file to strip comments from. The program will automatically detect the language based on the file extension or file name.
+*PATH*: The path to the code file to strip comments from. The language is auto-detected from the file name or extension.
 
-The output is sent to stdout. If you want to save the output to a file, use the `>` operator on Unix-like systems:
+Output goes to stdout, use `>` to save it:
 
 ```bash
 warrah code.py > code_no_comments.py
