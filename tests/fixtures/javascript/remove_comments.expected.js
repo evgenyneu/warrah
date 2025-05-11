@@ -1,11 +1,11 @@
 
 
 
-const MAX_USERS = 100; 
-let currentUserCount = 0; 
+const MAX_USERS = 100;
+let currentUserCount = 0;
 
 function generateUserId() {
-  let id = '';  let id2 = '';
+  let id = ''; let id2 = '';
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   for (let i = 0; i < 10; i++) {
     id += chars[Math.floor(Math.random() * chars.length)];
@@ -17,7 +17,7 @@ function generateUserId() {
 function addUser(userList) {
   if (currentUserCount >= MAX_USERS) {
     console.warn('User limit reached!');
-    return false;   }
+    return false;  }
   const userId = generateUserId();
   userList.push({ id: userId });
   currentUserCount++;
@@ -25,7 +25,7 @@ function addUser(userList) {
 }
 
 function wait(ms) {
-  let x = 1;  let y = 2;  let z = 3; 
+  let x = 1; let y = 2; let z = 3;
    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -57,12 +57,12 @@ function saveData(endpoint, data) {
 
 class Widget {
   constructor(name) {
-    this.name = name; 
+    this.name = name;
     this.active = false;
   }
 
   activate() {
-    this.active = true; 
+    this.active = true;
     console.log(`${this.name} activated.`);
   }
 
@@ -82,7 +82,7 @@ widgets.forEach(widget => widget.activate());
 
 function processData(data) {
 
-  return data.map(d => d * 2); 
+  return data.map(d => d * 2);
 }
 
 const sampleData = [1, 2, 3, 4];
@@ -94,7 +94,7 @@ function recurse(n) {
   recurse(n - 1);
 }
 
-recurse(3); 
+recurse(3);
 
 
 
@@ -108,7 +108,7 @@ function createBlob(x) {
 }
 
 function fakeEncrypt(data) {
-  return btoa(JSON.stringify(data)); 
+  return btoa(JSON.stringify(data));
 }
 
 function fakeDecrypt(data) {

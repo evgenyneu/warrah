@@ -42,7 +42,12 @@ fn process_line<'a>(
                 None => {
                     // Single line comment
                     if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace()) {
-                        result.push_str(before_comment);
+                        if remove_empty_lines {
+                            result.push_str(before_comment.trim_end());
+                        } else {
+                            result.push_str(before_comment);
+                        }
+
                         result.push('\n');
                     }
                     return None;
@@ -50,7 +55,11 @@ fn process_line<'a>(
                 Some(_) => {
                     // Multi-line comment
                     if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace()) {
-                        result.push_str(before_comment);
+                        if remove_empty_lines {
+                            result.push_str(before_comment.trim_end());
+                        } else {
+                            result.push_str(before_comment);
+                        }
                     }
 
                     // Recursively process the remainder after the start marker, now inside multi-line comment
@@ -348,7 +357,7 @@ let p = 9/* multi-line
 
         let result = remove_all_comments(content, &[("//", None)], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2; \n");
+        assert_eq!(result, "let x = 1;\n    let y = 2;\n");
     }
 
     #[test]
@@ -359,7 +368,7 @@ let p = 9/* multi-line
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2; \n");
+        assert_eq!(result, "let x = 1;\n    let y = 2;\n");
     }
 
     #[test]
@@ -372,7 +381,7 @@ let p = 9/* multi-line
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2; \n    let y = 3;\n");
+        assert_eq!(result, "let x = 1;\n    let y = 2;\n    let y = 3;\n");
     }
 
     #[test]
@@ -385,7 +394,7 @@ let p = 9/* multi-line
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n    let y = 2;  let y = 3;\n");
+        assert_eq!(result, "let x = 1;\n    let y = 2; let y = 3;\n");
     }
 
     #[test]
@@ -422,7 +431,7 @@ let p = 9/* multi-line
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1; \n    let y = 2;");
+        assert_eq!(result, "let x = 1;\n    let y = 2;");
     }
 
     #[test]
@@ -435,7 +444,7 @@ let p = 9/* multi-line
 
         assert_eq!(
             result,
-            "let x = 1;\n    let n = 2;  let w = 3;  y = 4; \n    let z = 5;"
+            "let x = 1;\n    let n = 2; let w = 3; y = 4;\n    let z = 5;"
         );
     }
 }
