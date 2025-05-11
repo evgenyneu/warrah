@@ -447,11 +447,14 @@ mod tests {
     #[test]
     fn test_multiple_multiline_comments() {
         let content = r#"let x = 1;
-    let y = 2; /* one */ let w = 3; /* two */ y = 4; /* three */
+    let n = 2; /* one */ let w = 3; /* two */ y = 4; /* three */
     let z = 5;"#;
 
         let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 
-        assert_eq!(result, "let x = 1;\n\n    let y = 2;");
+        assert_eq!(
+            result,
+            "let x = 1; \n    let n = 2;  let w = 3;  let z = 4; \n    let z = 5;"
+        );
     }
 }
