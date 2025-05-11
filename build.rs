@@ -1,4 +1,14 @@
-use build_script::map_languages;
+mod language {
+    include!("src/build/language.rs");
+}
+
+mod docs_parse {
+    include!("src/build/docs_parse.rs");
+}
+
+mod map_languages {
+    include!("src/build/map_languages.rs");
+}
 
 fn main() {
     println!("cargo:rerun-if-changed=docs/languages.md");
