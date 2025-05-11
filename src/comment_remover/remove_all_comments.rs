@@ -261,12 +261,12 @@ mod tests {
     #[test]
     fn test_multi_line_no_end_marker() {
         let content = r#"let x = 1;
-    /* multi-line
+ /* multi-line
     let y = 2;"#;
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n   ");
+        assert_eq!(result, "let x = 1;\n ");
     }
 
     #[test]
