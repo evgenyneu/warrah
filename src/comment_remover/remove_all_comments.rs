@@ -101,7 +101,7 @@ pub fn remove_all_comments(
         );
     }
 
-    if !has_trailing_newline {
+    if !has_trailing_newline && active_multi.is_none() {
         result.pop();
     }
 
