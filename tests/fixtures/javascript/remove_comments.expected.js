@@ -1,5 +1,6 @@
 
 
+
 const MAX_USERS = 100; 
 let currentUserCount = 0; 
 
@@ -12,11 +13,11 @@ function generateUserId() {
   return id;
 }
 
+
 function addUser(userList) {
   if (currentUserCount >= MAX_USERS) {
     console.warn('User limit reached!');
-    return false; 
-  }
+    return false;   }
   const userId = generateUserId();
   userList.push({ id: userId });
   currentUserCount++;
@@ -24,7 +25,7 @@ function addUser(userList) {
 }
 
 function wait(ms) {
-  let x = 1;  let y = 2; /* inline comment 2 */ let z = 3; /*  inline comment 3 */
+  let x = 1;  let y = 2;  let z = 3; 
    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -44,6 +45,7 @@ function startProcess(name) {
   systemState.processes.push(name);
   console.log(`Process '${name}' started.`);
 }
+
 
 function fetchData(endpoint) {
   return { status: 'ok', data: null, endpoint };
@@ -79,6 +81,7 @@ const widgets = [
 widgets.forEach(widget => widget.activate());
 
 function processData(data) {
+
   return data.map(d => d * 2); 
 }
 
@@ -92,6 +95,7 @@ function recurse(n) {
 }
 
 recurse(3); 
+
 
 
 
