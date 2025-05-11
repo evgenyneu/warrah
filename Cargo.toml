@@ -2,7 +2,7 @@
 name = "warrah"
 version = "0.1.0"
 edition = "2021"
-description = "Warrah: A command-line utility and Rust library that lazily removes code comments from a text file, supporting 60+ programming languages."
+description = "Warrah: A command-line utility and Rust library that sloppily removes code comments from a text file, supporting 60+ programming languages."
 license = "Unlicense"
 repository = "https://github.com/evgenyneu/warrah"
 readme = "README.md"
