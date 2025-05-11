@@ -29,6 +29,85 @@ use memchr::memmem;
 /// let result = remove_all_comments(content, &[("/*", Some("*/"))], true);
 /// assert_eq!(result, "let x = 1; \nlet y = 2;");
 /// ```
+fn process_line<'a>(
+    mut line: &'a str,
+    finders: &[(memmem::Finder, Option<memmem::Finder>)],
+    remove_empty_lines: bool,
+    mut active_multi: Option<usize>,
+    result: &mut String,
+) -> Option<usize> {
+    while !line.is_empty() {
+        if let Some(idx) = active_multi {
+            let (_, Some(end_finder)) = &finders[idx] else {
+                unreachable!()
+            };
+
+            if let Some(end_pos) = end_finder.find(line.as_bytes()) {
+                line = &line[end_pos + end_finder.needle().len()..];
+                active_multi = None;
+                continue;
+            } else {
+                // Entire line is inside comment
+                return Some(idx);
+            }
+        } else {
+            let mut next_pos = line.len();
+            let mut next_idx: Option<usize> = None;
+
+            for (i, (start_finder, _)) in finders.iter().enumerate() {
+                if let Some(pos) = start_finder.find(line.as_bytes()) {
+                    if pos < next_pos {
+                        next_pos = pos;
+                        next_idx = Some(i);
+                    }
+                }
+            }
+
+            if let Some(idx) = next_idx {
+                let before_comment = &line[..next_pos];
+                match &finders[idx].1 {
+                    None => {
+                        if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace())
+                        {
+                            result.push_str(before_comment);
+                            result.push('\n');
+                        }
+                        // Done with this line
+                        return None;
+                    }
+                    Some(end_finder) => {
+                        if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
+                            let comment_end = next_pos + end_pos + end_finder.needle().len();
+                            let before = &line[..next_pos];
+                            let after = &line[comment_end..];
+                            if !remove_empty_lines
+                                || !before.chars().all(|c| c.is_whitespace())
+                                || !after.chars().all(|c| c.is_whitespace())
+                            {
+                                result.push_str(before);
+                            }
+                            line = after;
+                            continue;
+                        } else {
+                            let before = &line[..next_pos];
+                            if !remove_empty_lines || !before.chars().all(|c| c.is_whitespace()) {
+                                result.push_str(before);
+                                result.push('\n');
+                            }
+                            return Some(idx);
+                        }
+                    }
+                }
+            } else {
+                result.push_str(line);
+                result.push('\n');
+                return None;
+            }
+        }
+    }
+    None
+}
+
 pub fn remove_all_comments(
     content: &str,
     markers: &[(&str, Option<&str>)],
@@ -41,7 +120,6 @@ pub fn remove_all_comments(
     let mut result = String::with_capacity(content.len());
     let has_trailing_newline = content.ends_with('\n');
 
-    // Precompute finders
     let finders: Vec<_> = markers
         .iter()
         .map(|(start, end)| {
@@ -55,81 +133,15 @@ pub fn remove_all_comments(
     let mut active_multi: Option<usize> = None;
 
     for line in content.lines() {
-        if let Some(idx) = active_multi {
-            // Inside multi-line comment: search for end marker
-            let (_, Some(end_finder)) = &finders[idx] else {
-                unreachable!()
-            };
-
-            if let Some(end_pos) = end_finder.find(line.as_bytes()) {
-                let remaining = &line[end_pos + end_finder.needle().len()..];
-                if !remove_empty_lines || !remaining.chars().all(|c| c.is_whitespace()) {
-                    result.push_str(remaining);
-                    result.push('\n');
-                }
-                active_multi = None;
-            }
-        } else {
-            // Outside comment: search for start marker
-            let mut next_pos = line.len();
-            let mut next_idx: Option<usize> = None;
-
-            // Check for start markers (single line or multi line)
-            for (i, (start_finder, _)) in finders.iter().enumerate() {
-                if let Some(pos) = start_finder.find(line.as_bytes()) {
-                    if pos < next_pos {
-                        next_pos = pos;
-                        next_idx = Some(i);
-                    }
-                }
-            }
-
-            if let Some(idx) = next_idx {
-                let before_comment = &line[..next_pos];
-
-                match &finders[idx].1 {
-                    None => {
-                        // Single-line comment
-                        if !remove_empty_lines || !before_comment.chars().all(|c| c.is_whitespace())
-                        {
-                            result.push_str(before_comment);
-                            result.push('\n');
-                        }
-                    }
-                    Some(end_finder) => {
-                        // Multi-line comment, look for the end marker on same line
-                        if let Some(end_pos) = end_finder.find(&line.as_bytes()[next_pos..]) {
-                            let comment_end = next_pos + end_pos + end_finder.needle().len();
-                            let remaining = &line[comment_end..];
-
-                            if !remove_empty_lines
-                                || !before_comment.chars().all(|c| c.is_whitespace())
-                                || !remaining.chars().all(|c| c.is_whitespace())
-                            {
-                                result.push_str(before_comment);
-                                result.push_str(remaining);
-                                result.push('\n');
-                            }
-                        } else {
-                            if !remove_empty_lines
-                                || !before_comment.chars().all(|c| c.is_whitespace())
-                            {
-                                result.push_str(before_comment);
-                                result.push('\n');
-                            }
-                            active_multi = Some(idx);
-                        }
-                    }
-                }
-            } else {
-                // No markers, copy the entire line
-                result.push_str(line);
-                result.push('\n');
-            }
-        }
+        active_multi = process_line(
+            line,
+            &finders,
+            remove_empty_lines,
+            active_multi,
+            &mut result,
+        );
     }
 
-    // Remove the last newline if it's not present in the original content
     if !has_trailing_newline {
         result.pop();
     }
@@ -271,7 +283,7 @@ mod tests {
 
         assert_eq!(
             result,
-            "let x = 1; \n    \n\n    let y = 2; \n    let z = 3;  let w = 4;\n"
+            "let x = 1; \n    \n    let y = 2; \n    let z = 3;  let w = 4;\n"
         );
     }
 
@@ -284,7 +296,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n    \n\n    let y = 2;");
+        assert_eq!(result, "let x = 1;\n    \n    let y = 2;");
     }
 
     #[test]
@@ -306,7 +318,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "\n\n    let y = 2;");
+        assert_eq!(result, "\n    let y = 2;");
     }
 
     #[test]
@@ -317,7 +329,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1;\n    \n");
+        assert_eq!(result, "let x = 1;\n    ");
     }
 
     #[test]
@@ -329,7 +341,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1; \n\n    let y = 2;");
+        assert_eq!(result, "let x = 1; \n    let y = 2;");
     }
 
     #[test]
@@ -342,7 +354,7 @@ mod tests {
 
         let result = remove_all_comments(content, &[("//", None), ("/*", Some("*/"))], false);
 
-        assert_eq!(result, "let x = 1; \n\n    let y = 2;");
+        assert_eq!(result, "let x = 1; \n    let y = 2;");
     }
 
     #[test]
