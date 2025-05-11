@@ -21,7 +21,7 @@ members = [
 memchr = "2.7.4"
 
 [build-dependencies]
-build-script = { path = "build", version = "0.1.0" }
+build-script = { path = "build" }
 
 [package.metadata]
 exclude = ["build"]
