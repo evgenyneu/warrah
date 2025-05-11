@@ -42,12 +42,13 @@ echo "CPU: $(lscpu | grep "Model name" | cut -d: -f2 | xargs) | OS: $(cat /etc/o
 
 See [benches/README.md](../benches/README.md) for more details.
 
-## VSCode extensions
+## How to add new langauge
 
-Here are some recommended extensions for VS Code
+Here is how to add a support for a new language or change comments in existing one:
 
-* [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
-
+1. Make changes to [docs/languages.md](languages.md) file.
+1. Build the project, it will auto-generate the Rust code for the changes in [src/languages/generated.rs](../src/languages/generated.rs).
+1. Submit a pull request.
 
 ## Contributing guidelines
 

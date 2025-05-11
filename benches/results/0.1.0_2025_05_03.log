@@ -3,62 +3,63 @@ CPU: 12th Gen Intel(R) Core(TM) i5-12600K | OS: Ubuntu 24.04.2 LTS
     Running benches/comment_remover.rs (target/release/deps/comment_remover-60c96c5c4dad6169)
 Gnuplot not found, using plotters backend
 == Test content size: 4.85 KB
-remove_comments         time:   [4.9957 µs 5.0248 µs 5.0542 µs]
-                        change: [-2.2266% -1.6577% -1.1203%] (p = 0.00 < 0.05)
-                        Performance has improved.
-Found 16 outliers among 100 measurements (16.00%)
-  1 (1.00%) low mild
-  11 (11.00%) high mild
-  4 (4.00%) high severe
+remove_comments         time:   [5.3709 µs 5.3886 µs 5.4091 µs]
+                        change: [-0.6396% -0.0132% +0.6863%] (p = 0.97 > 0.05)
+                        No change in performance detected.
+Found 15 outliers among 100 measurements (15.00%)
+  8 (8.00%) high mild
+  7 (7.00%) high severe
 
      Running benches/comment_remover_large_file.rs (target/release/deps/comment_remover_large_file-6776a4660b061ad7)
 Gnuplot not found, using plotters backend
 == Test content size: 47.34 MB
 Benchmarking remove_comments_large_file: Warming up for 3.0000 s
-Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 5.6s, or reduce sample count to 80.
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 6.0s, or reduce sample count to 80.
 remove_comments_large_file
-                        time:   [55.057 ms 55.385 ms 55.722 ms]
-                        change: [-1.4532% -0.5766% +0.2891%] (p = 0.22 > 0.05)
+                        time:   [59.722 ms 59.940 ms 60.195 ms]
+                        change: [-0.4007% +0.1401% +0.7172%] (p = 0.63 > 0.05)
                         No change in performance detected.
-Found 2 outliers among 100 measurements (2.00%)
-  2 (2.00%) high mild
+Found 15 outliers among 100 measurements (15.00%)
+  5 (5.00%) high mild
+  10 (10.00%) high severe
 
      Running benches/comment_remover_single_line.rs (target/release/deps/comment_remover_single_line-2cce510afc505b7d)
 Gnuplot not found, using plotters backend
 == Test content size: 20.84 KB
 remove_single_line_comments
-                        time:   [14.511 µs 14.568 µs 14.632 µs]
-                        change: [-1.5522% -0.7690% +0.0275%] (p = 0.06 > 0.05)
+                        time:   [16.701 µs 16.736 µs 16.779 µs]
+                        change: [-0.9057% -0.2187% +0.4702%] (p = 0.54 > 0.05)
                         No change in performance detected.
-Found 12 outliers among 100 measurements (12.00%)
-  4 (4.00%) high mild
-  8 (8.00%) high severe
+Found 18 outliers among 100 measurements (18.00%)
+  3 (3.00%) high mild
+  15 (15.00%) high severe
 
      Running benches/detect_language.rs (target/release/deps/detect_language-8b48e1b34e83e69e)
 Gnuplot not found, using plotters backend
 == Testing with 30 different language extensions
 detect_language_by_extension
-                        time:   [761.54 ns 763.47 ns 765.57 ns]
-                        change: [-0.6846% -0.1692% +0.3411%] (p = 0.52 > 0.05)
+                        time:   [778.32 ns 781.02 ns 783.99 ns]
+                        change: [-0.5384% +0.0665% +0.6438%] (p = 0.83 > 0.05)
                         No change in performance detected.
-Found 8 outliers among 100 measurements (8.00%)
-  6 (6.00%) high mild
-  2 (2.00%) high severe
+Found 17 outliers among 100 measurements (17.00%)
+  9 (9.00%) high mild
+  8 (8.00%) high severe
 
      Running benches/integration.rs (target/release/deps/integration-17ccb0cc8dd55b91)
 Gnuplot not found, using plotters backend
-main_success_run        time:   [4.0168 ms 4.1662 ms 4.3019 ms]
-                        change: [-7.7977% -3.4843% +0.3370%] (p = 0.09 > 0.05)
+main_success_run        time:   [4.1637 ms 4.2755 ms 4.3731 ms]
+                        change: [-3.8811% -0.7842% +2.6434%] (p = 0.65 > 0.05)
                         No change in performance detected.
-Found 17 outliers among 100 measurements (17.00%)
-  11 (11.00%) low severe
-  6 (6.00%) low mild
+Found 11 outliers among 100 measurements (11.00%)
+  8 (8.00%) low severe
+  3 (3.00%) low mild
 
      Running benches/integration_call_function.rs (target/release/deps/integration_call_function-20a2ad6cb20a657f)
 Gnuplot not found, using plotters backend
 integration_call_function
-                        time:   [6.4727 µs 6.5070 µs 6.5461 µs]
-                        change: [-0.6922% -0.0867% +0.5669%] (p = 0.79 > 0.05)
-                        No change in performance detected.
-Found 7 outliers among 100 measurements (7.00%)
-  7 (7.00%) high mild
+                        time:   [6.9681 µs 6.9896 µs 7.0149 µs]
+                        change: [-2.3263% -1.5801% -0.8479%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 20 outliers among 100 measurements (20.00%)
+  5 (5.00%) high mild
+  15 (15.00%) high severe
