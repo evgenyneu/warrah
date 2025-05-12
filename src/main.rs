@@ -23,10 +23,13 @@ fn print_help() {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 
-    if args.len() != 2 {
+    let has_help_option =
+        (args.len() == 2 && args[1] == "--help") || (args.len() == 2 && args[1] == "-h");
+
+    if args.len() != 2 || has_help_option {
         print_help();
 
-        if args.len() == 1 {
+        if args.len() == 1 || has_help_option {
             std::process::exit(0);
         } else {
             std::process::exit(1);
