@@ -42,7 +42,7 @@ echo "CPU: $(lscpu | grep "Model name" | cut -d: -f2 | xargs) | OS: $(cat /etc/o
 
 See [benches/README.md](../benches/README.md) for more details.
 
-## How to add new langauge
+## How to add a new langauge
 
 Here is how to add a support for a new language or change comments in existing one:
 
