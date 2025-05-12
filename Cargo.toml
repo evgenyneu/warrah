@@ -1,6 +1,6 @@
 [package]
 name = "warrah"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Warrah: A command-line utility and Rust library that sloppily removes code comments from a text file, supporting 60+ programming languages."
 license = "Unlicense"
