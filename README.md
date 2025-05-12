@@ -78,7 +78,7 @@ warrah code.py > code_no_comments.py
 
 ## Rust library
 
-See [https://crates.io/crates/warrah](https://crates.io/crates/warrah) if you want to use Warrah as a Rust library.
+See [https://docs.rs/warrah/](https://docs.rs/warrah/) if you want to use Warrah as a Rust library.
 
 ## Development
 
