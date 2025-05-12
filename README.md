@@ -76,6 +76,11 @@ Output goes to stdout, use `>` to save it:
 warrah code.py > code_no_comments.py
 ```
 
+## Rust library
+
+See [src/README.md](src/README.md) if you want to use Warrah as a Rust library.
+
+
 ## Development
 
 See [docs/development.md](docs/development.md) for instructions on how to set up the development environment.
