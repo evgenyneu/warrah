@@ -35,7 +35,21 @@ let result = remove_all_comments(
 );
 ```
 
-### Detect language
+Note: use the functions below to automatically detect comment markers.
+
+### Detect language and return comment markers
+
+From file path:
+
+```rust
+use std::path::PathBuf;
+use warrah::process::file_path::get_marker_by_file_path;
+
+let path = PathBuf::from("/dir/example.rs");
+let markers = get_marker_by_file_path(&path).unwrap();
+```
+
+From file extension or filename:
 
 ```rust
 use warrah::languages::language_maps::{get_markers_by_extension, get_markers_by_filename};

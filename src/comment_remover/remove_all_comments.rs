@@ -1,5 +1,72 @@
 use memchr::memmem;
 
+/// Remove all comments from a string.
+///
+/// # Arguments
+///
+/// * `content` - The string to remove comments from.
+/// * `markers` - The comment markers to remove.
+/// * `remove_empty_lines` - Whether to remove empty lines after comment removal.
+///
+/// # Returns
+///
+/// * `String` - The string with comments removed.
+///
+/// # Examples
+///
+/// ```
+/// use warrah::comment_remover::remove_all_comments::remove_all_comments;
+///
+/// let content = "let x = 1; // comment\nlet y = 2;";
+///
+/// let result = remove_all_comments(
+///     content,
+///     &[("//", None), ("/*", Some("*/"))],
+///     true
+/// );
+/// ```
+pub fn remove_all_comments(
+    content: &str,
+    markers: &[(&str, Option<&str>)],
+    remove_empty_lines: bool,
+) -> String {
+    if markers.is_empty() {
+        return content.to_string();
+    }
+
+    let mut result = String::with_capacity(content.len());
+    let has_trailing_newline = content.ends_with('\n');
+
+    let finders: Vec<_> = markers
+        .iter()
+        .map(|(start, end)| {
+            (
+                memmem::Finder::new(start),
+                end.map(|e| memmem::Finder::new(e)),
+            )
+        })
+        .collect();
+
+    let mut active_multi: Option<usize> = None;
+
+    for line in content.lines() {
+        active_multi = process_line(
+            line,
+            &finders,
+            remove_empty_lines,
+            active_multi,
+            &mut result,
+        );
+    }
+
+    if !has_trailing_newline && active_multi.is_none() {
+        // Remove new line from the end of the string if it was not present in the original string
+        result.pop();
+    }
+
+    result
+}
+
 fn process_line<'a>(
     line: &'a str,
     finders: &[(memmem::Finder, Option<memmem::Finder>)],
@@ -14,8 +81,9 @@ fn process_line<'a>(
         };
 
         if let Some(end_pos) = end_finder.find(line.as_bytes()) {
-            let after = &line[end_pos + end_finder.needle().len()..];
+            // Found end marker
             // Recursively process the remainder after the end marker
+            let after = &line[end_pos + end_finder.needle().len()..];
             return process_line(after, finders, remove_empty_lines, None, result);
         } else {
             // Entire line is inside comment
@@ -74,47 +142,6 @@ fn process_line<'a>(
             return None;
         }
     }
-}
-
-pub fn remove_all_comments(
-    content: &str,
-    markers: &[(&str, Option<&str>)],
-    remove_empty_lines: bool,
-) -> String {
-    if markers.is_empty() {
-        return content.to_string();
-    }
-
-    let mut result = String::with_capacity(content.len());
-    let has_trailing_newline = content.ends_with('\n');
-
-    let finders: Vec<_> = markers
-        .iter()
-        .map(|(start, end)| {
-            (
-                memmem::Finder::new(start),
-                end.map(|e| memmem::Finder::new(e)),
-            )
-        })
-        .collect();
-
-    let mut active_multi: Option<usize> = None;
-
-    for line in content.lines() {
-        active_multi = process_line(
-            line,
-            &finders,
-            remove_empty_lines,
-            active_multi,
-            &mut result,
-        );
-    }
-
-    if !has_trailing_newline && active_multi.is_none() {
-        result.pop();
-    }
-
-    result
 }
 
 #[cfg(test)]

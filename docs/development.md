@@ -25,7 +25,7 @@ cd warrah
 Run both project and build tests:
 
 ```bash
-cargo test --workspace
+cargo test
 ```
 
 ## Running benchmarks

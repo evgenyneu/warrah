@@ -61,7 +61,27 @@ fn verify_file_exists(path: &Path) -> Result<(), String> {
 
 /// Returns the comment markers for the given path to a file.
 /// Returns None if no markers can be detected.
-fn get_marker_by_file_path(path: &Path) -> Option<&'static [(&'static str, Option<&'static str>)]> {
+///
+/// # Arguments
+///
+/// * `path` - The path to the file to get the comment markers for. The path is used to detect the language, the file is not read. Case insensitive.
+///
+/// # Returns
+///
+/// * `Option<&'static [(&'static str, Option<&'static str>)]>` - The comment markers for the given path
+///
+/// # Examples
+///
+/// ```
+/// use std::path::PathBuf;
+/// use warrah::process::file_path::get_marker_by_file_path;
+///
+/// let path = PathBuf::from("/dir/example.rs");
+/// let markers = get_marker_by_file_path(&path).unwrap();
+/// ```
+pub fn get_marker_by_file_path(
+    path: &Path,
+) -> Option<&'static [(&'static str, Option<&'static str>)]> {
     path.extension()
         .and_then(|ext| ext.to_str())
         .map(|ext| ext.to_lowercase())
