@@ -17,7 +17,7 @@ use std::path::PathBuf;
 let path = PathBuf::from("/dir/example.rs");
 
 // Remove comments from a file given a path (case insensitive)
-let result = remove_comments(path, 1024 * 1024, true)?;
+let result = remove_comments(path, 1024 * 1024, true);
 ```
 
 ### Remove comments from a string
@@ -55,10 +55,10 @@ From file extension or filename:
 use warrah::languages::language_maps::{get_markers_by_extension, get_markers_by_filename};
 
 // Get comment markers by file extension (must be lowercase)
-let markers = get_markers_by_extension("rs")?;
+let markers = get_markers_by_extension("rs");
 
 // Get comment markers by filename (must be lowercase)
-let markers = get_markers_by_filename("dockerfile")?;
+let markers = get_markers_by_filename("dockerfile");
 ```
 
 ## The unlicense
