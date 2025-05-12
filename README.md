@@ -78,13 +78,11 @@ warrah code.py > code_no_comments.py
 
 ## Rust library
 
-See [src/README.md](src/README.md) if you want to use Warrah as a Rust library.
-
+See [https://crates.io/crates/warrah](https://crates.io/crates/warrah) if you want to use Warrah as a Rust library.
 
 ## Development
 
 See [docs/development.md](docs/development.md) for instructions on how to set up the development environment.
-
 
 ## Contributing
 
@@ -94,16 +92,13 @@ See contributing guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The warrah, or Falkland Islands wolf (Dusicyon australis), also known as the "Antarctic wolf," was the only native land mammal of the Falkland Islands. It was hunted by settlers for its fur and perceived threat to livestock, leading to its extinction in 1876.
 
-
 <img src='./images/FalklandIslandFox2.jpg' alt='Picture of Falkland Island Fox'>
 
 *Falkland Island fox or "Antarctic Wolf" by John Gerrard Keulemans, from St. George Mivart's Dogs, Jackals, Wolves, and Foxes: A Monograph of the Canidae, published by R. H. Porter, London, 1890. Lithography by Mintern Brothers. Source: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:FalklandIslandFox2.jpg).*
 
-
 ## Feedback is welcome
 
 If you need help or notice a bug, feel free to create an issue ticket. We will be happy to help. :D
-
 
 ## The unlicense
 

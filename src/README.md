@@ -1,6 +1,6 @@
 # Warrah Library
 
-A Rust library that sloppily removes code comments from a text file. Supports [60+ programming languages](../docs/languages.md).
+A Rust library that sloppily removes code comments from a text file. Supports [60+ programming languages](https://github.com/evgenyneu/warrah/blob/main/docs/languages.md).
 
 It's a sloppy program because it doesn't fully parse the code. It uses simple and fast logic to detect single- and multi-line comments. Consequently, it will remove comments inside strings and may result in invalid code.
 

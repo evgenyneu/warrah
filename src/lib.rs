@@ -1,3 +1,5 @@
+#![doc = include_str!("README.md")]
+
 #[doc(hidden)]
 pub mod build;
 pub mod comment_remover;
