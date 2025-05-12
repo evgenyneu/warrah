@@ -1,4 +1,5 @@
 #[derive(Debug)]
+#[doc(hidden)]
 pub struct Language {
     // disable dead code warning for this field
     #[allow(dead_code)]

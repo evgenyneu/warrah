@@ -2,12 +2,14 @@ use super::language::Language;
 use std::collections::HashSet;
 use std::io;
 
+#[doc(hidden)]
 pub fn generate_and_save_all_mappings(doc_path: &str, output_path: &str) -> io::Result<()> {
     let languages = super::docs_parse::parse_languages_file(doc_path)?;
     let mappings = generate_all_mappings(&languages)?;
     std::fs::write(output_path, mappings)
 }
 
+#[doc(hidden)]
 pub fn generate_all_mappings(languages: &[Language]) -> io::Result<String> {
     let extension_map = generate_extension_map(languages)?;
     let filename_map = generate_filename_map(languages)?;
@@ -22,6 +24,7 @@ pub fn generate_all_mappings(languages: &[Language]) -> io::Result<String> {
     Ok(result)
 }
 
+#[doc(hidden)]
 pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
     let mut seen_extensions = HashSet::new();
     let mut tuples = Vec::new();
@@ -76,6 +79,7 @@ pub fn generate_extension_map(languages: &[Language]) -> io::Result<String> {
     Ok(code)
 }
 
+#[doc(hidden)]
 pub fn generate_filename_map(languages: &[Language]) -> io::Result<String> {
     let mut seen_filenames = HashSet::new();
     let mut tuples = Vec::new();

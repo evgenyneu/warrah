@@ -1,6 +1,7 @@
 use std::path::Path;
 
 /// Verifies that the file size is within the allowed limit.
+#[doc(hidden)]
 pub fn verify_file_size(path: &Path, max_size: u64) -> Result<(), String> {
     let metadata =
         std::fs::metadata(path).map_err(|e| format!("Failed to read file metadata: {}", e))?;
@@ -15,6 +16,7 @@ pub fn verify_file_size(path: &Path, max_size: u64) -> Result<(), String> {
 }
 
 /// Creates an error message for when a file is too large
+#[doc(hidden)]
 pub fn create_file_too_large_error(path: &Path, size: u64, max_size: u64) -> String {
     format!(
         "File too large ({}). Maximum allowed size is {}: {}",
@@ -25,6 +27,7 @@ pub fn create_file_too_large_error(path: &Path, size: u64, max_size: u64) -> Str
 }
 
 /// Returns the appropriate unit and divisor for the given size in bytes
+#[doc(hidden)]
 pub fn get_size_unit(size: u64) -> (&'static str, f64) {
     if size >= 1024 * 1024 * 1024 * 1024 {
         ("TB", 1024.0 * 1024.0 * 1024.0 * 1024.0)
@@ -40,6 +43,7 @@ pub fn get_size_unit(size: u64) -> (&'static str, f64) {
 }
 
 /// Formats a size in bytes to a human-readable string with appropriate unit
+#[doc(hidden)]
 pub fn format_size(size: u64) -> String {
     let (unit, divisor) = get_size_unit(size);
 

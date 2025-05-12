@@ -1,6 +1,8 @@
 mod comment_remover;
 mod languages;
 mod process;
+
+#[doc(hidden)]
 mod test_utils;
 
 use crate::process::file_path::remove_comments;

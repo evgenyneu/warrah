@@ -2,11 +2,13 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 /// Returns full path to a fixture file
+#[doc(hidden)]
 pub fn fixture_path(relative_path: &str) -> PathBuf {
     Path::new("tests/fixtures").join(relative_path)
 }
 
 /// Returns contents of a fixture file as string
+#[doc(hidden)]
 pub fn fixture_text(relative_path: &str) -> String {
     fs::read_to_string(fixture_path(relative_path))
         .expect(&format!("Failed to read fixture: {}", relative_path))
@@ -14,6 +16,7 @@ pub fn fixture_text(relative_path: &str) -> String {
 
 /// Compares output with expected fixture content.
 /// Creates the expected fixture if it doesn't exist.
+#[doc(hidden)]
 pub fn assert_eq_fixture(output: &str, expected_fixture_path: &str) {
     let path = fixture_path(expected_fixture_path);
 

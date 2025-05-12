@@ -1,10 +1,12 @@
 use super::language::Language;
 
+#[doc(hidden)]
 pub fn parse_languages_file(path: &str) -> Result<Vec<Language>, std::io::Error> {
     let content = std::fs::read_to_string(path)?;
     Ok(parse_languages(&content))
 }
 
+#[doc(hidden)]
 pub fn parse_languages(content: &str) -> Vec<Language> {
     let mut languages = Vec::new();
     let mut current_language: Option<Language> = None;
