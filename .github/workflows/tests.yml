@@ -12,16 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: rust-lang/setup-rust@v1
         with:
-          profile: minimal
-          toolchain: stable
-          override: true
+          rust-version: stable
+
       - name: Run tests
-        uses: actions-rs/cargo@v1
+        run: cargo test --workspace
         env:
           CI: true
-        with:
-          command: test
-          args: --workspace
