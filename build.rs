@@ -11,6 +11,11 @@ mod map_languages {
 }
 
 fn main() {
+    if std::env::var("DOCS_RS").is_ok() {
+        println!("cargo:warning=Skipping code generation on docs.rs (read-only filesystem)");
+        return;
+    }
+
     println!("cargo:rerun-if-changed=docs/languages.md");
 
     let doc_path = "docs/languages.md";
